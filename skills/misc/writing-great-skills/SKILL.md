@@ -53,6 +53,23 @@ sharp skills compose; big general ones collide.
   run on explicit request — interactive sessions, doc generation, anything
   expensive or intrusive.
 
+Each model-invoked description is loaded into the agent's context so it can match
+against it — they cost tokens. Don't mark a skill model-invoked just because you
+can; do it when autonomous discovery is worth the context.
+
+## The composition trap — user-invoked can't reach user-invoked
+
+A user-invoked skill is hidden from the agent (its description is excluded from
+the manifest). So:
+
+- A user-invoked skill **can** invoke a model-invoked one.
+- A user-invoked skill **cannot** invoke another user-invoked one — the agent
+  can't see the target, and the instruction dangles silently.
+
+When you build a user-invoked *wrapper* that composes a reusable *engine*, make
+the engine **model-invoked**. A "pairs with" link for the reader is just docs and
+doesn't count — only an actual "run this skill" instruction is a dependency.
+
 ## Before you ship it
 
 - Does the description make the trigger moment unmistakable?

@@ -1,7 +1,6 @@
 ---
 name: grilling
 description: Use when the user wants to stress-test a plan or design before building it, or uses any "grill" trigger phrase ("grill me", "poke holes", "interrogate this plan"). Surfaces hidden assumptions and unresolved decisions one question at a time.
-disable-model-invocation: true
 ---
 
 # Grilling
