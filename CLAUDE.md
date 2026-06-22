@@ -54,6 +54,13 @@ disable-model-invocation: true   # OPTIONAL — only for user-invoked slash comm
 - [ ] Add a row to the catalog table in `README.md`.
 - [ ] If it's a port/inspiration from a new source, add a **Thank Yous** line.
 
+## Experiments — the `wip/` folder
+
+Drafts and experiments live in top-level `wip/`, **not** under `skills/`. That
+keeps them out of the live catalog, out of model invocation, and out of CI until
+they're ready. Promote with `git mv wip/<name> skills/<category>/<name>`, then
+validate, add a catalog row, and note provenance. See `wip/README.md`.
+
 ## Plugin packaging (later)
 
 The repo is structured so it can become an installable Claude Code plugin by

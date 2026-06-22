@@ -43,10 +43,27 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | inspired by Warp |
 | [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
 
+### data
+| Skill | What it does | Source |
+|---|---|---|
+| [writing-dbt-models](skills/data/writing-dbt-models/SKILL.md) | dbt craft: staging→intermediate→marts layering, ref/source, materializations, tests, docs. | original |
+| [dbt-incremental-models](skills/data/dbt-incremental-models/SKILL.md) | Incremental correctness: unique_key, is_incremental(), late-arriving data, full-refresh. | original |
+| [reviewing-sql](skills/data/reviewing-sql/SKILL.md) | Analytical SQL correctness: join fan-out, NULL semantics, GROUP BY grain, window dedup. | original |
+| [data-quality-checks](skills/data/data-quality-checks/SKILL.md) | Validate pipeline output: counts, nullability, uniqueness, freshness, referential integrity. | original |
+| [dimensional-modeling](skills/data/dimensional-modeling/SKILL.md) | Facts/dims, declaring the grain, keys, SCDs, additivity. | original |
+| [building-data-pipelines](skills/data/building-data-pipelines/SKILL.md) | Extract→Land→Transform→Load separation, idempotency, backfills, watermarks. | original |
+| [bigquery-superpowers](skills/data/bigquery-superpowers/SKILL.md) | Partition/cluster, prune bytes scanned, dry-run cost, bulk extract/load. | original |
+
 ### misc
 | Skill | What it does | Source |
 |---|---|---|
 | [writing-great-skills](skills/misc/writing-great-skills/SKILL.md) | How to author a skill that triggers correctly and stays focused. | inspired by Matt Pocock |
+
+## Work in progress
+
+Experiments and drafts live in [`wip/`](./wip/) — outside `skills/`, so they
+aren't auto-invoked or checked by CI until promoted. See
+[`wip/README.md`](./wip/README.md) for the promotion flow.
 
 ## Thank Yous
 
