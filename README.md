@@ -30,6 +30,8 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [diagnosing-bugs](skills/engineering/diagnosing-bugs/SKILL.md) | Find a bug's root cause through evidence before proposing any fix. | inspired by Matt Pocock |
 | [finding-concurrency-bugs](skills/engineering/finding-concurrency-bugs/SKILL.md) | Hunt deadlocks, races, livelocks, and await-holding-lock defects. | inspired by Jeffrey |
 | [metamorphic-testing](skills/engineering/metamorphic-testing/SKILL.md) | Test systems with no obvious "correct answer" by asserting input/output relationships. | inspired by Jeffrey |
+| [create-pr](skills/engineering/create-pr/SKILL.md) | Open a reviewable PR: focused diff, self-review, a description a reviewer can act on. | inspired by Warp |
+| [resolve-merge-conflicts](skills/engineering/resolve-merge-conflicts/SKILL.md) | Resolve conflicts by honoring both sides' intent — never blindly accept one side. | inspired by Warp |
 | [fixing-and-merging-prs](skills/engineering/fixing-and-merging-prs/SKILL.md) | Take open PRs from red CI to merged without colliding with other agents. | original |
 
 ### productivity
@@ -38,6 +40,7 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [grilling](skills/productivity/grilling/SKILL.md) | Interrogate a plan relentlessly, one question at a time, until it's airtight. | inspired by Matt Pocock |
 | [grill-with-docs](skills/productivity/grill-with-docs/SKILL.md) | A grilling session that captures decisions as ADRs and a glossary along the way. | inspired by Matt Pocock |
 | [handoff](skills/productivity/handoff/SKILL.md) | Write a complete handoff doc so another session can pick up exactly where you left off. | inspired by Matt Pocock |
+| [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | inspired by Warp |
 | [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
 
 ### misc
@@ -56,6 +59,9 @@ We write our own prose, but the ideas, framing, and inspiration come from:
   his excellent public skills repo.
 - **Jeffrey** — concurrency-bug hunting and metamorphic testing are inspired by
   his skills catalog.
+- **[Warp](https://github.com/warpdotdev/common-skills)** — the PR-creation,
+  merge-conflict, and cross-critique skills are inspired by Warp's MIT-licensed
+  common-skills repo.
 
 If your work inspired a skill here and you'd like different (or no) attribution,
 open an issue — happy to adjust.

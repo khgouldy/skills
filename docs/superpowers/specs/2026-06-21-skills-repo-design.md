@@ -63,6 +63,11 @@ skills/
 | recon-before-action | engineering | original (Kevin) |
 | fixing-and-merging-prs | engineering | original (Kevin, vendored) |
 | writing-great-skills | misc | inspired by Matt Pocock |
+| cross-critique | productivity | inspired by Warp |
+| create-pr | engineering | inspired by Warp |
+| resolve-merge-conflicts | engineering | inspired by Warp |
+
+_Skills 12–14 (Warp) added 2026-06-22 as a follow-on cherry-pick._
 
 ## Skill file convention
 
