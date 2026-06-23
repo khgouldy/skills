@@ -11,3 +11,12 @@ node_modules/
 *.log
 .env
 .env.*
+
+# Generated site (built in CI from skills/**/SKILL.md)
+site-src/
+site/
+
+# Local docs toolchain / tooling cruft
+.venv-docs/
+.playwright-mcp/
+home.png
