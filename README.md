@@ -96,4 +96,4 @@ open an issue — happy to adjust.
 
 ## License
 
-[MIT](./LICENSE) © 2026 Kevin Green (par72)
+[MIT](./LICENSE) © 2026 Kevin Gould (par72)
