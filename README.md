@@ -65,6 +65,17 @@ Experiments and drafts live in [`wip/`](./wip/) — outside `skills/`, so they
 aren't auto-invoked or checked by CI until promoted. See
 [`wip/README.md`](./wip/README.md) for the promotion flow.
 
+## Evals
+
+Trigger evals (does a skill fire when it should, and stay quiet otherwise?) live
+in [`evals/`](./evals/). They measure the most objective property of a skill —
+activation precision/recall — for the skills most likely to collide over the same
+prompts. See [`evals/README.md`](./evals/README.md) for the format and scoring.
+
+CI (`scripts/validate-skills.mjs`) checks SKILL.md frontmatter **and** the
+invocation-dependency rule (a user-invoked skill must not invoke another
+user-invoked skill).
+
 ## Thank Yous
 
 This library stands on the shoulders of people who shared their skills openly.

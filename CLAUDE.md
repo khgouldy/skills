@@ -53,6 +53,9 @@ disable-model-invocation: true   # OPTIONAL — only for user-invoked slash comm
 - [ ] Body is in our own voice; provenance note at the bottom.
 - [ ] Add a row to the catalog table in `README.md`.
 - [ ] If it's a port/inspiration from a new source, add a **Thank Yous** line.
+- [ ] If it competes with an existing skill over the same prompts, add an
+      `evals/<name>.eval.md` with should-fire / should-NOT-fire cases.
+- [ ] Run `node scripts/validate-skills.mjs` (frontmatter + invocation-dep rule).
 
 ## Experiments — the `wip/` folder
 
