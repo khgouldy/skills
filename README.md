@@ -33,6 +33,11 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [create-pr](skills/engineering/create-pr/SKILL.md) | Open a reviewable PR: focused diff, self-review, a description a reviewer can act on. | inspired by Warp |
 | [resolve-merge-conflicts](skills/engineering/resolve-merge-conflicts/SKILL.md) | Resolve conflicts by honoring both sides' intent — never blindly accept one side. | inspired by Warp |
 | [fixing-and-merging-prs](skills/engineering/fixing-and-merging-prs/SKILL.md) | Take open PRs from red CI to merged without colliding with other agents. | original |
+| [arena](skills/engineering/arena/SKILL.md) | Generate several candidates for one task in parallel, pick a base, graft the best parts of the rest into it. | inspired by pstack |
+| [blast-radius](skills/engineering/blast-radius/SKILL.md) | Find what a change breaks *beyond its diff*, then prove the one safety-critical fact by running real code. | inspired by pstack |
+| [why](skills/engineering/why/SKILL.md) | Recover the *rationale* behind code from git, tickets, docs, chat, and observability — cited, with confidence calibrated. | inspired by pstack |
+| [deslop](skills/engineering/deslop/SKILL.md) | Strip AI tells from *code* in a diff: stray comments, defensive guards on trusted paths, `any` casts, deep nesting. | inspired by cursor-team-kit |
+| [control-ui](skills/engineering/control-ui/SKILL.md) | Drive a real web/IDE/Electron UI locally to verify behavior with evidence — screenshots, snapshots, profiles, repros. | inspired by cursor-team-kit |
 
 ### productivity
 | Skill | What it does | Source |
@@ -42,6 +47,8 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [handoff](skills/productivity/handoff/SKILL.md) | Write a complete handoff doc so another session can pick up exactly where you left off. | inspired by Matt Pocock |
 | [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | inspired by Warp |
 | [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
+| [unslop](skills/productivity/unslop/SKILL.md) | Strip AI tells from *prose* and add a human voice — docs, PRs, comments, reports. | inspired by pstack |
+| [show-me-your-work](skills/productivity/show-me-your-work/SKILL.md) | Keep a reviewable decision-trail log (one TSV row per decision) for long or unattended work. | inspired by pstack |
 
 ### data
 | Skill | What it does | Source |
@@ -58,6 +65,22 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | Skill | What it does | Source |
 |---|---|---|
 | [writing-great-skills](skills/misc/writing-great-skills/SKILL.md) | How to author a skill that triggers correctly and stays focused. | inspired by Matt Pocock |
+
+### principles
+
+Small, model-invoked *mental-model* skills that nudge a decision at the right
+moment rather than running a procedure. They live under `engineering/` and
+`productivity/` but read as a family.
+
+| Skill | What it does | Source |
+|---|---|---|
+| [foundational-thinking](skills/engineering/foundational-thinking/SKILL.md) | Get the data structures right first; scaffold before features; isolate shared state. | inspired by pstack |
+| [redesign-from-first-principles](skills/engineering/redesign-from-first-principles/SKILL.md) | Fold a new requirement in as if it had been there on day one — don't bolt it on. | inspired by pstack |
+| [minimize-reader-load](skills/engineering/minimize-reader-load/SKILL.md) | Optimize for the reader: count layers to trace and state to hold; collapse and shrink both. | inspired by pstack |
+| [exhaust-the-design-space](skills/engineering/exhaust-the-design-space/SKILL.md) | When the answer isn't obvious, build 2-3 alternatives and compare before committing. | inspired by pstack |
+| [make-operations-idempotent](skills/engineering/make-operations-idempotent/SKILL.md) | Design operations to converge to the same end state across crashes, restarts, and retries. | inspired by pstack |
+| [fix-root-causes](skills/engineering/fix-root-causes/SKILL.md) | Fix at the source; refuse guards that just silence a symptom. | inspired by pstack |
+| [experience-first](skills/productivity/experience-first/SKILL.md) | Choose the consumer's experience over implementation convenience; ship fewer, more polished things. | inspired by pstack |
 
 ## Work in progress
 
@@ -90,6 +113,15 @@ We write our own prose, but the ideas, framing, and inspiration come from:
 - **[Warp](https://github.com/warpdotdev/common-skills)** — the PR-creation,
   merge-conflict, and cross-critique skills are inspired by Warp's MIT-licensed
   common-skills repo.
+- **[Lauren Tan (poteto)](https://github.com/cursor/plugins/tree/main/pstack)** —
+  the `arena`, `blast-radius`, `why`, `unslop`, `show-me-your-work` skills and the
+  whole **principles** family (foundational-thinking, redesign-from-first-principles,
+  minimize-reader-load, exhaust-the-design-space, make-operations-idempotent,
+  fix-root-causes, experience-first) are inspired by her MIT-licensed `pstack`
+  plugin for Cursor.
+- **[Cursor](https://github.com/cursor/plugins/tree/main/cursor-team-kit)** — the
+  `deslop` and `control-ui` skills are inspired by Cursor's MIT-licensed
+  `cursor-team-kit` plugin.
 
 If your work inspired a skill here and you'd like different (or no) attribution,
 open an issue — happy to adjust.
