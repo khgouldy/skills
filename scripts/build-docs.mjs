@@ -16,6 +16,12 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(ROOT, "skills");
 const OUT_DIR = join(ROOT, "site-src");
 
+// Base GitHub blob URL for the real SKILL.md sources. The generated site lives
+// at site-src/<cat>/<name>.md, but the source is skills/<cat>/<name>/SKILL.md —
+// not a simple prefix swap — so we inject an explicit, correct "View source"
+// link per page rather than relying on MkDocs' edit_uri.
+const REPO_BLOB = "https://github.com/khgouldy/skills/blob/main/skills";
+
 // Section presentation: title, icon (Material icon shortcode), one-line blurb.
 const CATEGORIES = {
   engineering: { title: "Engineering", icon: ":material-wrench:", blurb: "Writing, debugging, testing, and shipping code." },
@@ -86,11 +92,15 @@ for (const category of listDirs(SKILLS_DIR)) {
     const description = meta.description || "";
     catalog[category].push({ name, description });
 
-    // Body already opens with "# Title"; inject the description as a subtitle.
-    const page = rewriteLinks(body, category, name).replace(
-      /^(#\s+.+\n)/,
-      description ? `$1\n*${description}*\n` : "$1"
-    );
+    // Body already opens with "# Title"; inject the description as a subtitle
+    // plus a "View source" button linking to the real SKILL.md on GitHub.
+    const sourceUrl = `${REPO_BLOB}/${category}/${name}/SKILL.md`;
+    const button = `[:material-github: View source](${sourceUrl}){ .md-button }\n`;
+    // Strip emphasis markers from the description so they don't break the
+    // italic subtitle wrapping when a description contains its own *emphasis*.
+    const subtitle = description.replace(/\*/g, "");
+    const header = subtitle ? `$1\n*${subtitle}*\n\n${button}` : `$1\n${button}`;
+    const page = rewriteLinks(body, category, name).replace(/^(#\s+.+\n)/, header);
     writeFileSync(join(outDir, `${name}.md`), page);
   }
 }
