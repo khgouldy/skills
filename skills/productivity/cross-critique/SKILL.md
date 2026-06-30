@@ -1,56 +1,86 @@
 ---
 name: cross-critique
-description: Use when a decision is high-stakes or genuinely uncertain and you want it stress-tested before committing — dispatch independent critiques of a proposed choice, then synthesize. Triggers include "pressure-test this decision", "what am I missing", "red-team this", choosing between architectures, or any irreversible call worth a second and third opinion.
-disable-model-invocation: true
+description: Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision — architecture tradeoffs, code review disagreements, design choices, competing root-cause theories — and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.
 ---
 
 # Cross-Critique
 
-Sharpen a decision by attacking it from several independent angles *before* you
-commit, then synthesize what survives. A single line of reasoning has blind
-spots; multiple independent critiques expose the ones you can't see from inside
-your own argument.
+Use this skill to run a **second round** after several subagents have independently produced proposals or opinions on the same contested question. Instead of synthesizing their reports yourself, you circulate each proposal to the *other* authors and ask them to critique it — pros and cons — and then you synthesize the richer set of analyses that results.
 
-## When it's worth it
+## Why this matters
 
-For reversible, low-stakes calls, just decide. Reach for cross-critique when the
-decision is **expensive to undo** or **genuinely uncertain**: architecture
-choices, data-model commitments, anything where being wrong costs days.
+When you generate independent proposals (different models, different angles), each author ends up with deep context on the question — often deeper than yours, since they did the investigation. If you jump straight to synthesizing their reports alone, you're the bottleneck: you can only see the tradeoffs *you* happen to notice.
 
-## How to run it
+Asking the authors to critique each other is what a good leader does when seeking advice: get a few people with differing perspectives in a room, let them poke holes in each other's reasoning, and you walk away with a far more complete picture than any one of them — or you — would produce alone. The authors will surface failure modes, hidden assumptions, and tradeoffs that neither you nor the original proposer flagged.
 
-1. **State the proposal crisply.** One clear statement of the decision and the
-   reasoning behind it. Vague proposals get vague critiques.
+## When to use it
 
-2. **Dispatch independent critics — give each a distinct lens.** Don't ask three
-   agents the same question; redundant critics find redundant problems. Assign
-   different angles, e.g.:
-   - **Correctness / logic** — where does the reasoning not hold?
-   - **Risk / failure modes** — how does this go wrong in production, at scale,
-     at 3am?
-   - **Cost / simplicity** — is there a materially cheaper or simpler option that
-     gets 90% of the value?
-   - **The opposite** — argue the strongest case for the alternative we're
-     rejecting.
+Use cross-critique when a decision is **contested** — i.e. independent agents produced genuinely divergent proposals, or the question is subjective enough that reasonable approaches disagree. Good fits:
 
-   Run them independently so they don't anchor on each other.
+- Architecture and design tradeoffs.
+- Code review where reviewers reached different conclusions.
+- Competing root-cause theories for a bug.
+- Code-structure or API-shape decisions with no single right answer.
 
-3. **Demand specifics, not vibes.** A critique that says "seems risky" is noise.
-   Each critic should name a concrete failure, a concrete cheaper alternative, or
-   a concrete flawed assumption.
+Don't bother when the proposals already strongly agree, or when the question has an objective answer you can verify directly — critique adds latency and tokens, and its value comes specifically from resolving genuine disagreement. Within that scope, use it freely; you don't need a high-stakes justification, just real divergence worth resolving.
 
-4. **Synthesize — don't just average.** Read the critiques and decide what
-   actually changes your mind. Some objections are decisive; some are
-   theoretical. The output is a *sharper decision* (possibly the original one,
-   now better-justified), not a tally of votes.
+## Prerequisite: you need independent proposals first
 
-## Output
+This skill is the *second* round. It assumes you already have N independent proposals in hand. If you don't yet:
 
-A short writeup: the decision, the objections that mattered, how they changed
-(or didn't change) the call, and the residual risks you're knowingly accepting.
-That record is itself valuable — it's the "why" a future
-[handoff](../handoff/SKILL.md) or ADR needs.
+- For a judgment-heavy decision, generate them with the **council** skill (model-diverse subagents on the same question).
+- For an investigation-heavy question, generate them by spawning parallel subagents (see the **research** skill).
+- Or use any ad-hoc set of independent subagent proposals you've already collected.
 
----
+Critically, the first round must be **independent** — do not let the authors see each other's work during round one, or you lose the diversity that makes round two valuable.
 
-_Inspired by Warp's cross-critique skill (https://github.com/warpdotdev/common-skills). Prose is our own._
+## How to do it
+
+### 1. Assemble the proposals
+
+Collect each author's proposal. Keep them concise — the core recommendation and its reasoning, not the full transcript. Consider labeling them neutrally (Proposal A, B, C) and, where practical, anonymizing authorship to reduce bandwagon bias toward whichever model sounds most confident.
+
+### 2. Circulate and ask for structured critique
+
+Reuse the **same subagents** from round one rather than spawning fresh ones — they retain their context and can critique from a position of understanding. Send each author the *other* proposals (not their own) and ask each for:
+
+- For each alternative: its **pros** (what it gets right, where it's stronger than my approach) and its **cons** (risks, edge cases, hidden costs, wrong assumptions).
+- Whether, having seen the alternatives, they would **revise their own** recommendation — and why or why not.
+- A final ranking or recommendation with confidence.
+
+Insist on *both* pros and cons for each alternative. An honest critique that credits a rival's strengths is far more useful than a reflexive defense of one's own proposal.
+
+### 3. Synthesize
+
+Now bring it together yourself. Compare critiques by **evidence quality, not vote count**. In your final answer:
+
+- Lead with the recommendation.
+- Note where the authors converged after seeing each other's work — convergence in round two is a strong signal.
+- Surface the most incisive cons raised against each option.
+- Explain why the recommended option survives critique best against the decision criteria.
+- Call out remaining disagreement, confidence, and material unknowns.
+
+## Final answer template
+
+Use this shape unless the task calls for something different:
+
+```markdown
+## Recommendation
+[One or two sentences with the decision.]
+
+## How the critiques shifted things
+- [Where authors converged or changed their minds after seeing alternatives]
+- [The strongest objection raised, and whether it's decisive]
+
+## Why this option wins
+- [Reason grounded in the critiques]
+
+## Remaining risks and unknowns
+- [Open question or caveat]
+```
+
+## Practical notes
+
+- Keep the critique round read-only unless the underlying task explicitly involves making changes.
+- Don't expose internal subagent IDs in user-facing summaries unless the user asks.
+- If a critique is thin or unsupported, send a focused follow-up to that same author rather than discarding it.

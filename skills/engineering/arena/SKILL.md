@@ -1,103 +1,71 @@
 ---
 name: arena
-description: Use when one attempt at a non-trivial artifact would lock in the wrong shape and you want to explore the design space before committing — generate several independent candidates for the same task, pick the strongest as a base, and graft the best parts of the rest into it. Triggers include "arena this", "throw it in the arena", "try a few approaches and pick the best", or a risky design where the first draft would anchor everything after it.
+description: "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
 disable-model-invocation: true
 ---
 
 # Arena
 
-Fan out several independent attempts at the same task. Read every candidate in
-full. Pick the strongest as the base. Graft the best ideas from the losers into
-it. Verify the result. One attempt anchors you to the first shape that compiles;
-an arena lets you see the shape *after* you've seen the alternatives.
+Fan out N parallel attempts at the same task. Read every candidate end to end. Pick the strongest as the base. Graft the best ideas from the others into it. Verify the synthesized result.
 
-Use it for work where the shape is uncertain and expensive to change later: an
-API design, a tricky refactor, a data model, a hard algorithm. Skip it for work
-with one obvious shape — the fan-out is pure overhead there.
+## Start
 
-## Phases
+Open a todolist with one entry per phase before launching anything. The arena runs autonomously and the list keeps phases from silently disappearing.
 
-Open a todo with one item per phase before launching anything. The arena runs
-mostly on its own, and the list keeps a phase from silently vanishing.
+1. Frame
+2. Fan out
+3. Cross-judge
+4. Pick
+5. Graft
+6. Verify
 
-### 1. Frame
+## Phase A: Frame
 
-Every candidate gets the same prompt, so the prompt *is* the contract. Get it
-right before spawning.
+The N candidates will receive the same prompt, so the prompt is the contract. Get it right before spawning anything.
 
-- **State the artifact** each candidate must produce.
-- **Derive a rubric** — 3–6 concrete, gradeable criteria. Concrete:
-  "adds a `--dry-run` flag that skips all writes." Vague: "code is correct." The
-  rubric is *your* tool for picking later; the candidates never see it.
-- **Pick the runners.** Use different models where you have them — diversity is
-  the whole point, since different models fail in different places. The same
-  model N times is fine when the work is generation-bound rather than
-  judgment-sensitive.
-- **Assign separate output paths.** Each candidate writes to its own location —
-  a git worktree where possible, otherwise a scratch dir like
-  `arena/candidate-<n>/`. N candidates writing to one path is shared mutable
-  state and will corrupt the run.
+1. State the artifact each candidate is producing.
+2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. Concrete: `Adds a --dry-run flag that skips writes`. Vague: `code is correct`. The rubric is the picker's tool in Phase D; candidates only see the task.
+3. Pick the runners. Default runners are your configured arena list (defaults `claude-opus-4-8-thinking-xhigh`, `gpt-5.5-high-fast`, `composer-2.5-fast`). Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`). N candidates writing to the same path is shared mutable state and fails the the **separate-before-serializing-shared-state** principle skill test.
 
-### 2. Fan out
+## Phase B: Fan out
 
-Dispatch all candidates in one message so they run concurrently. Each gets the
-task, any shared grounding, its own output path, and an instruction to produce
-**both the artifact and a short rationale**. The rationale is mandatory: it names
-the alternatives the candidate weighed and what it rejected. Without it you can't
-tell whether a candidate's structure is principled or accidental, which makes the
-graft step guesswork. If a candidate produces nothing, proceed with the rest and
-note the dropout.
+Spawn all N subagents in one message with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
 
-### 3. Judge (optional but recommended)
+The rationale is mandatory. Without it, the parent cannot tell whether a candidate's structure is principled or accidental, which makes Phase E grafting unreliable. Each rationale names the alternatives the candidate considered and what it rejected.
 
-After every candidate is done, dispatch one read-only judge — on a different
-model from yours where possible. It sees the rubric and the candidates by path,
-scores each criterion, and recommends a base with reasons. Spawn it only *after*
-the candidates finish; a judge that reads half-written output reports phantom
-dropouts.
+If a candidate fails to produce output, proceed with N-1 and note the dropout in the synthesis record.
 
-### 4. Pick a base
+## Phase C: Cross-judge
 
-Read every candidate end to end before picking — skimming surfaces only the one
-that *looks* most familiar. Score each against the rubric criterion by criterion,
-not on holistic feel. Compare with the judge: agreement confirms the pick;
-disagreement means one of you is biased or the rubric was ambiguous, so read both
-rationales before deciding. Prefer the candidate a future maintainer can extend
-most easily without breaking invariants — when two feel tied, take the smaller
-surface area or the cleaner boundary. Record the pick and why.
+After all Phase B candidates complete, spawn one readonly judge subagent on a different model family from the parent's. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Spawning while candidates are still writing means the judge sees partial or empty outputs and reports them as dropouts.
 
-### 5. Graft
+## Phase D: Pick a base
 
-Walk each losing candidate once more for the one or two things worth porting in
-(it's rarely more than that). Fold each graft in **by hand** so the result stays
-coherent under a single mental model — don't paste mechanically. Record what was
-grafted from where, and **what was rejected and why**. The rejection notes are
-the highest-signal part of the record: future readers learn from what you
-considered and dropped.
+Read every candidate end to end before picking. Skimming N candidates surfaces only the candidate whose surface looks most familiar.
 
-When candidates **converge** on the same shape, that's strong agreement — ship
-the consensus, no graft needed. When they **wildly diverge**, the frame was
-under-specified — reframe and re-run rather than averaging the divergence.
+Score each candidate against the rubric criterion by criterion, not on holistic feel. Compare against the cross-judge. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
 
-### 6. Verify
+Pick the base on which candidate a future maintainer can extend most easily without breaking invariants. Prefer the cleaner boundary or smaller surface area when two feel tied, per the Laziness Protocol.
 
-The synthesized artifact earns no pass for being a synthesis. Hold it to the same
-scrutiny as any other output — run it, test it, prove it. If verification
-surfaces something the arena missed, either the frame was wrong (reframe, re-run)
-or a candidate caught it and you missed the graft (go back to step 5). Don't
-paper over.
+Record the pick and the reason in a short synthesis note alongside the base artifact, including the cross-judge's verdict.
 
-## Output
+## Phase E: Graft
 
-One synthesized artifact, plus a short note alongside it naming the base, the
-grafts (with their source candidate), the rejections, any dropouts, and the
-verification result.
+Walk each losing candidate once more and identify what is worth porting into the base. The signal is usually one or two things per candidate, not most of it.
 
-Pairs with [blast-radius](../blast-radius/SKILL.md) (a wide, risky change is a
-good arena candidate) and [cross-critique](../../productivity/cross-critique/SKILL.md)
-(arena explores *implementations*; cross-critique stress-tests a single
-*decision*).
+Fold each graft in by hand, per the **redesign-from-first-principles** principle skill. Don't paste mechanically. The result has to remain coherent under one mental model.
 
----
+Record what was grafted, from which candidate, and what was rejected and why. The rejection notes are the highest-signal part of the record. Future readers learn from what you considered and dropped, not just what you kept.
 
-_Inspired by the `arena` skill in Lauren Tan's (poteto) [pstack](https://github.com/cursor/plugins/tree/main/pstack). Prose is our own; model-specific and Cursor-specific details adapted for Claude Code._
+When N candidates converge on the same shape, that is a strong agreement signal. Note the convergence in the record and ship the consensus shape. No graft is needed. When N candidates wildly diverge, Phase A was under-specified. Reframe and re-run rather than averaging the divergence.
+
+## Phase F: Verify
+
+The synthesized artifact has to hold up under the same scrutiny as any other output, per the **prove-it-works** principle skill. The arena does not earn you a pass.
+
+If verification surfaces a problem the arena did not catch, either Phase A was wrong (re-frame and re-run) or one candidate caught it and you missed the graft (go back to Phase E). Don't paper over.
+
+## Outputs
+
+One synthesized artifact. One short synthesis note alongside, naming the base, the grafts (with source candidate), the rejections, the dropouts if any, and the verification result.

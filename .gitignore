@@ -20,3 +20,12 @@ site/
 .venv-docs/
 .playwright-mcp/
 home.png
+
+# skills.sh CLI scratch install targets — canonical store is skills/<category>/
+.claude/
+.agents/
+.factory/
+.hermes/
+.junie/
+.windsurf/
+.goose/

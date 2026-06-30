@@ -1,60 +1,89 @@
 ---
 name: resolve-merge-conflicts
-description: Use when a merge, rebase, or cherry-pick stops on conflicts and you need to resolve them correctly — understand both sides' intent before picking, never blindly accept one side. Triggers include "fix the merge conflicts", "this rebase is conflicting", conflict markers in files, or a PR that can't merge because it's behind.
+description: Resolve Git merge conflicts by extracting only unresolved paths, conflict hunks, and compact diffs instead of loading whole files into context. Use when a merge, rebase, cherry-pick, or stash pop stops on conflicts, when `git status` shows unmerged paths, or when files contain conflict markers.
 ---
 
 # Resolve Merge Conflicts
 
-A conflict means two changes touched the same place and git can't decide which
-intent wins. Your job is to produce a result that honors *both* intents — not to
-make the markers disappear. The dangerous failure is a clean-looking resolution
-that silently drops one side's change.
+## Overview
 
-## The method
+Resolve conflicts without opening full files unless the compact view is insufficient. Start with a summary, then inspect one conflicted file at a time.
 
-1. **Know which operation you're in.** `merge`, `rebase`, and `cherry-pick`
-   label "ours" and "theirs" differently — during a rebase, "ours" is the branch
-   you're replaying *onto*, which is the opposite of a plain merge. Check
-   `git status` so you don't reason backwards.
+## Workflow
 
-2. **Understand both sides before touching anything.** For each conflicted hunk,
-   find out *why* each side changed it: `git log` / `git blame` on both branches,
-   read the surrounding code. A conflict is a disagreement between two
-   intentions; you can't reconcile intentions you haven't read.
+1. Start with a summary.
 
-3. **Resolve by intent, not by side.** The correct result is often *neither* a
-   clean "ours" nor "theirs" but a combination: keep this side's rename *and*
-   that side's new field. Blindly `--ours`/`--theirs` is the most common way to
-   lose work.
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py
+```
 
-4. **Watch for semantic conflicts git can't see.** Code can merge cleanly and
-   still be broken — one side renamed a function, the other added a new caller of
-   the old name in a non-conflicting hunk. After resolving the textual conflicts,
-   build and run the tests.
+Use the summary to identify which files are unresolved, which index stages exist, and how many text hunks each file contains.
 
-5. **Remove every marker, verify, then continue.** Confirm no `<<<<<<<`,
-   `=======`, `>>>>>>>` remain, compile/lint/test, then
-   `git add` the files and `git rebase --continue` / `git merge --continue`.
+2. Drill into one file.
 
-## Red flags — STOP
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py --file path/to/file
+```
 
-- "I'll just accept incoming to make it merge" → **you're probably deleting the
-  other side's work.** Resolve by intent.
-- "The file has no markers now, so it's done" → **markers gone ≠ correct.** Run
-  the tests; check for semantic conflicts.
-- "I don't know why theirs changed this, but I'll keep mine" → **go read the
-  history first.** Guessing on a conflict ships a bug.
-- Resolving a huge tangled conflict in one pass → consider aborting
-  (`git rebase --abort`) and redoing it in smaller steps, or rebasing onto an
-  intermediate point.
+Prefer this over reading the whole file. The script prints only nearby context, the `ours` / `base` / `theirs` sections for each hunk, and a compact unified diff between `ours` and `theirs`.
 
-## If you're in a multi-agent repo
+3. Resolve the file.
 
-Before resolving conflicts on a shared branch, confirm no other agent owns it
-(see [fixing-and-merging-prs](../fixing-and-merging-prs/SKILL.md)'s ownership
-gate). Force-pushing a rebased branch out from under another agent is its own
-kind of conflict.
+- Take one side wholesale with `git checkout --ours -- path/to/file` or `git checkout --theirs -- path/to/file` when appropriate.
+- Otherwise edit the file directly and remove the conflict markers.
+- Read more of the file only if the compact output is not enough to decide the correct merge.
 
----
+4. Re-check unresolved files.
 
-_Inspired by Warp's resolve-merge-conflicts skill (https://github.com/warpdotdev/common-skills). Prose is our own._
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py
+git diff --name-only --diff-filter=U
+```
+
+5. Validate the resolution.
+
+- Ensure no unmerged paths remain.
+- Ensure no `<<<<<<<`, `=======`, or `>>>>>>>` markers remain in the resolved files.
+- Run targeted tests, builds, or linters for the touched area.
+- Stage the resolved files.
+
+## Commands
+
+### Summary only
+
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py
+```
+
+### Detailed view for one file
+
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py --file path/to/file
+```
+
+### Detailed view for all conflicted files
+
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py --all
+```
+
+### JSON output
+
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py --file path/to/file --json
+```
+
+### Tune output size
+
+```bash
+python3 .agents/skills/resolve-merge-conflicts/scripts/extract_conflict_context.py \
+  --file path/to/file \
+  --context 3 \
+  --max-lines 60
+```
+
+## Notes
+
+- Use the script before opening conflicted files directly.
+- Resolve one file at a time to keep context small.
+- Expect marker-based text conflicts and index-only conflicts such as add/add or modify/delete. The script summarizes both, and it falls back to index-stage previews when the worktree file has no conflict markers.

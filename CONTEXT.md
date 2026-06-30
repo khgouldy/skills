@@ -60,6 +60,14 @@ Prefer composing existing skills over duplicating their content.
 
 ## Provenance
 
-Every skill records where it came from. Ported or inspired-by skills carry an
-`_inspired-by` note at the bottom of their `SKILL.md`, and the source is
-credited in the README **Thank Yous**. Original skills are marked as such.
+Every skill is either **authored** or **vendored**, and the README catalog's
+Source column says which:
+
+- **Authored** — we maintain the body. `original` (ours), or `authored · no
+  upstream` when the idea came from someone with nothing installable to pull.
+  Credited in the README **Thank Yous** when it draws on someone else's work.
+- **Vendored** — a verbatim copy of an upstream skill, pulled with
+  `scripts/vendor.mjs` and pinned in `skills-lock.json` (`source` · `skillPath`
+  · `computedHash`). We don't edit vendored bodies; the lockfile *is* the
+  provenance record, and it's what lets us detect when an upstream changes
+  (`scripts/vendor.mjs --check`).
