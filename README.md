@@ -11,14 +11,35 @@ for how to add one.
 
 ## Install
 
-This repo is structured to become an installable plugin later. For now, use the
-skills by symlinking or copying them into your Claude Code skills directory:
-
 ```bash
 git clone https://github.com/khgouldy/skills.git
 # copy individual skills into ~/.claude/skills/, e.g.
 cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 ```
+
+## Authored vs. vendored
+
+Every skill is one of two kinds, tracked explicitly:
+
+- **Authored** — written here in our own voice (`original`), or with no
+  installable upstream (`no upstream`). These are maintained by hand.
+- **Vendored** — a *verbatim copy* of an upstream skill, pulled with the
+  [`skills`](https://skills.sh) CLI and pinned in
+  [`skills-lock.json`](./skills-lock.json) (`source` · `skillPath` ·
+  `computedHash`). We don't edit vendored bodies; we re-pull them.
+
+Why pin the hash? It's the answer to *"how do I know when an upstream changes?"*
+`scripts/vendor.mjs --check` re-fetches every vendored skill and compares it to
+the pinned hash; the [`check upstream drift`](./.github/workflows/check-upstream-drift.yml)
+workflow runs it weekly and opens an issue when an upstream moves. To adopt the
+change, run `node scripts/vendor.mjs` (re-pulls content + refreshes the lockfile)
+and commit.
+
+> **Note:** vendored skills carry their upstream's framing and invocation mode
+> verbatim. The pstack-sourced skills (`arena` and every `principle-*`) ship
+> **user-invoked** (`disable-model-invocation: true`) upstream, so they no longer
+> auto-fire — invoke them by name. Some bodies reference their origin tool (e.g.
+> `create-pr` mentions Warp).
 
 ## Catalog
 
@@ -26,29 +47,29 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | Skill | What it does | Source |
 |---|---|---|
 | [recon-before-action](skills/engineering/recon-before-action/SKILL.md) | Pick the fastest viable way to get data/build an integration before writing code — a speed hierarchy + complexity gate. | original |
-| [tdd](skills/engineering/tdd/SKILL.md) | Drive implementation test-first: red → green → refactor. | inspired by Matt Pocock |
-| [diagnosing-bugs](skills/engineering/diagnosing-bugs/SKILL.md) | Find a bug's root cause through evidence before proposing any fix. | inspired by Matt Pocock |
-| [finding-concurrency-bugs](skills/engineering/finding-concurrency-bugs/SKILL.md) | Hunt deadlocks, races, livelocks, and await-holding-lock defects. | inspired by Jeffrey |
-| [metamorphic-testing](skills/engineering/metamorphic-testing/SKILL.md) | Test systems with no obvious "correct answer" by asserting input/output relationships. | inspired by Jeffrey |
-| [create-pr](skills/engineering/create-pr/SKILL.md) | Open a reviewable PR: focused diff, self-review, a description a reviewer can act on. | inspired by Warp |
-| [resolve-merge-conflicts](skills/engineering/resolve-merge-conflicts/SKILL.md) | Resolve conflicts by honoring both sides' intent — never blindly accept one side. | inspired by Warp |
+| [tdd](skills/engineering/tdd/SKILL.md) | Drive implementation test-first: red → green → refactor. | vendored · mattpocock/skills |
+| [diagnosing-bugs](skills/engineering/diagnosing-bugs/SKILL.md) | Find a bug's root cause through evidence before proposing any fix. | vendored · mattpocock/skills |
+| [finding-concurrency-bugs](skills/engineering/finding-concurrency-bugs/SKILL.md) | Hunt deadlocks, races, livelocks, and await-holding-lock defects. | authored · no upstream |
+| [metamorphic-testing](skills/engineering/metamorphic-testing/SKILL.md) | Test systems with no obvious "correct answer" by asserting input/output relationships. | authored · no upstream |
+| [create-pr](skills/engineering/create-pr/SKILL.md) | Open a reviewable PR: focused diff, self-review, a description a reviewer can act on. | vendored · warpdotdev/common-skills |
+| [resolve-merge-conflicts](skills/engineering/resolve-merge-conflicts/SKILL.md) | Resolve conflicts by honoring both sides' intent — never blindly accept one side. | vendored · warpdotdev/common-skills |
 | [fixing-and-merging-prs](skills/engineering/fixing-and-merging-prs/SKILL.md) | Take open PRs from red CI to merged without colliding with other agents. | original |
-| [arena](skills/engineering/arena/SKILL.md) | Generate several candidates for one task in parallel, pick a base, graft the best parts of the rest into it. | inspired by pstack |
-| [blast-radius](skills/engineering/blast-radius/SKILL.md) | Find what a change breaks *beyond its diff*, then prove the one safety-critical fact by running real code. | inspired by pstack |
-| [why](skills/engineering/why/SKILL.md) | Recover the *rationale* behind code from git, tickets, docs, chat, and observability — cited, with confidence calibrated. | inspired by pstack |
-| [deslop](skills/engineering/deslop/SKILL.md) | Strip AI tells from *code* in a diff: stray comments, defensive guards on trusted paths, `any` casts, deep nesting. | inspired by cursor-team-kit |
-| [control-ui](skills/engineering/control-ui/SKILL.md) | Drive a real web/IDE/Electron UI locally to verify behavior with evidence — screenshots, snapshots, profiles, repros. | inspired by cursor-team-kit |
+| [arena](skills/engineering/arena/SKILL.md) | Generate several candidates for one task in parallel, pick a base, graft the best parts of the rest into it. | vendored · cursor/plugins (pstack) |
+| [blast-radius](skills/engineering/blast-radius/SKILL.md) | Find what a change breaks *beyond its diff*, then prove the one safety-critical fact by running real code. | vendored · cursor/plugins (pstack) |
+| [why](skills/engineering/why/SKILL.md) | Recover the *rationale* behind code from git, tickets, docs, chat, and observability — cited, with confidence calibrated. | vendored · cursor/plugins (pstack) |
+| [deslop](skills/engineering/deslop/SKILL.md) | Strip AI tells from *code* in a diff: stray comments, defensive guards on trusted paths, `any` casts, deep nesting. | vendored · cursor/plugins (cursor-team-kit) |
+| [control-ui](skills/engineering/control-ui/SKILL.md) | Drive a real web/IDE/Electron UI locally to verify behavior with evidence — screenshots, snapshots, profiles, repros. | vendored · cursor/plugins (cursor-team-kit) |
 
 ### productivity
 | Skill | What it does | Source |
 |---|---|---|
-| [grilling](skills/productivity/grilling/SKILL.md) | Interrogate a plan relentlessly, one question at a time, until it's airtight. | inspired by Matt Pocock |
-| [grill-with-docs](skills/productivity/grill-with-docs/SKILL.md) | A grilling session that captures decisions as ADRs and a glossary along the way. | inspired by Matt Pocock |
-| [handoff](skills/productivity/handoff/SKILL.md) | Write a complete handoff doc so another session can pick up exactly where you left off. | inspired by Matt Pocock |
-| [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | inspired by Warp |
+| [grilling](skills/productivity/grilling/SKILL.md) | Interrogate a plan relentlessly, one question at a time, until it's airtight. | vendored · mattpocock/skills |
+| [grill-with-docs](skills/productivity/grill-with-docs/SKILL.md) | A grilling session that captures decisions as ADRs and a glossary along the way. | vendored · mattpocock/skills |
+| [handoff](skills/productivity/handoff/SKILL.md) | Write a complete handoff doc so another session can pick up exactly where you left off. | vendored · mattpocock/skills |
+| [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | vendored · warpdotdev/common-skills |
 | [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
-| [unslop](skills/productivity/unslop/SKILL.md) | Strip AI tells from *prose* and add a human voice — docs, PRs, comments, reports. | inspired by pstack |
-| [show-me-your-work](skills/productivity/show-me-your-work/SKILL.md) | Keep a reviewable decision-trail log (one TSV row per decision) for long or unattended work. | inspired by pstack |
+| [unslop](skills/productivity/unslop/SKILL.md) | Strip AI tells from *prose* and add a human voice — docs, PRs, comments, reports. | vendored · cursor/plugins (pstack) |
+| [show-me-your-work](skills/productivity/show-me-your-work/SKILL.md) | Keep a reviewable decision-trail log (one TSV row per decision) for long or unattended work. | vendored · cursor/plugins (pstack) |
 
 ### data
 | Skill | What it does | Source |
@@ -64,23 +85,25 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 ### misc
 | Skill | What it does | Source |
 |---|---|---|
-| [writing-great-skills](skills/misc/writing-great-skills/SKILL.md) | How to author a skill that triggers correctly and stays focused. | inspired by Matt Pocock |
+| [writing-great-skills](skills/misc/writing-great-skills/SKILL.md) | How to author a skill that triggers correctly and stays focused. | vendored · mattpocock/skills |
 
 ### principles
 
-Small, model-invoked *mental-model* skills that nudge a decision at the right
-moment rather than running a procedure. They live under `engineering/` and
-`productivity/` but read as a family.
+Small *mental-model* skills that nudge a decision at the right moment rather
+than running a procedure. They live under `engineering/` and `productivity/`
+but read as a family. Vendored verbatim from pstack, where they ship as
+`principle-*` and are **user-invoked** (`disable-model-invocation: true`) —
+invoke them by name; they do not auto-fire.
 
 | Skill | What it does | Source |
 |---|---|---|
-| [foundational-thinking](skills/engineering/foundational-thinking/SKILL.md) | Get the data structures right first; scaffold before features; isolate shared state. | inspired by pstack |
-| [redesign-from-first-principles](skills/engineering/redesign-from-first-principles/SKILL.md) | Fold a new requirement in as if it had been there on day one — don't bolt it on. | inspired by pstack |
-| [minimize-reader-load](skills/engineering/minimize-reader-load/SKILL.md) | Optimize for the reader: count layers to trace and state to hold; collapse and shrink both. | inspired by pstack |
-| [exhaust-the-design-space](skills/engineering/exhaust-the-design-space/SKILL.md) | When the answer isn't obvious, build 2-3 alternatives and compare before committing. | inspired by pstack |
-| [make-operations-idempotent](skills/engineering/make-operations-idempotent/SKILL.md) | Design operations to converge to the same end state across crashes, restarts, and retries. | inspired by pstack |
-| [fix-root-causes](skills/engineering/fix-root-causes/SKILL.md) | Fix at the source; refuse guards that just silence a symptom. | inspired by pstack |
-| [experience-first](skills/productivity/experience-first/SKILL.md) | Choose the consumer's experience over implementation convenience; ship fewer, more polished things. | inspired by pstack |
+| [principle-foundational-thinking](skills/engineering/principle-foundational-thinking/SKILL.md) | Get the data structures right first; scaffold before features; isolate shared state. | vendored · cursor/plugins (pstack) |
+| [principle-redesign-from-first-principles](skills/engineering/principle-redesign-from-first-principles/SKILL.md) | Fold a new requirement in as if it had been there on day one — don't bolt it on. | vendored · cursor/plugins (pstack) |
+| [principle-minimize-reader-load](skills/engineering/principle-minimize-reader-load/SKILL.md) | Optimize for the reader: count layers to trace and state to hold; collapse and shrink both. | vendored · cursor/plugins (pstack) |
+| [principle-exhaust-the-design-space](skills/engineering/principle-exhaust-the-design-space/SKILL.md) | When the answer isn't obvious, build 2-3 alternatives and compare before committing. | vendored · cursor/plugins (pstack) |
+| [principle-make-operations-idempotent](skills/engineering/principle-make-operations-idempotent/SKILL.md) | Design operations to converge to the same end state across crashes, restarts, and retries. | vendored · cursor/plugins (pstack) |
+| [principle-fix-root-causes](skills/engineering/principle-fix-root-causes/SKILL.md) | Fix at the source; refuse guards that just silence a symptom. | vendored · cursor/plugins (pstack) |
+| [principle-experience-first](skills/productivity/principle-experience-first/SKILL.md) | Choose the consumer's experience over implementation convenience; ship fewer, more polished things. | vendored · cursor/plugins (pstack) |
 
 ## Work in progress
 

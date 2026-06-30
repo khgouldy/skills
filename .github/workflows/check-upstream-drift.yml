@@ -1,0 +1,49 @@
+name: check upstream drift
+
+# Verbatim-vendored skills (see skills-lock.json) are copies of upstream skills.
+# This job re-fetches each upstream and flags any whose content has changed since
+# we vendored it — the signal that an authored upstream shipped an update worth
+# reviewing. It opens (or comments on) a tracking issue; it never auto-updates.
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Mondays 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check upstream drift
+        id: drift
+        run: |
+          set +e
+          node scripts/vendor.mjs --check 2>&1 | tee drift.log
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update drift issue
+        if: steps.drift.outputs.code != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="Upstream skill drift detected"
+          body=$'A vendored skill changed upstream since it was last vendored.\n\nReview the change, then run `node scripts/vendor.mjs` and commit.\n\n```\n'"$(cat drift.log)"$'\n```'
+          existing=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body" --label upstream-drift
+          fi
+
+      - name: Fail the run if drift
+        if: steps.drift.outputs.code != '0'
+        run: exit 1

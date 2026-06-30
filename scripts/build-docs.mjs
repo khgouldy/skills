@@ -8,7 +8,7 @@
 // per-category index page, so MkDocs builds clean section URLs (engineering/ etc.)
 // and the nav stays in sync with whatever skills exist on disk.
 
-import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, dirname, resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -44,24 +44,41 @@ function parseSkill(raw) {
 }
 
 /**
- * Skills cross-link each other with paths shaped for the source tree, e.g.
- * `../tdd/SKILL.md` or `../../engineering/metamorphic-testing/SKILL.md`. Our
- * generated tree is flatter (site-src/<cat>/<name>.md), so resolve each link
- * against the source layout and re-point it at the corresponding generated page.
- * Links that don't resolve to a real skill are left untouched.
+ * Skills cross-link each other and — for vendored skills — their own support
+ * files (references/*, tests.md, GLOSSARY.md, …). The source tree uses paths
+ * like `../tdd/SKILL.md`; the generated tree is flatter (site-src/<cat>/<name>.md)
+ * and doesn't emit support files. So we rewrite each relative link:
+ *   - to another skill we publish here   → its flat page (`../<cat>/<name>.md`);
+ *   - to a skill we DON'T publish (an un-vendored upstream sibling) → drop to
+ *     plain text, since there's no page to point at;
+ *   - to a support file in the skill's own folder → the file on GitHub (a valid
+ *     external link, which keeps `mkdocs --strict` happy).
+ * External URLs, anchors, and anything outside the skills tree are left as-is.
  */
 function rewriteLinks(body, srcCategory, srcName) {
   const srcDir = join(SKILLS_DIR, srcCategory, srcName);
-  return body.replace(/\]\(([^)]*?\/SKILL\.md)\)/g, (whole, link) => {
-    if (/^https?:/.test(link)) return whole;
-    const rel = relative(SKILLS_DIR, dirname(resolve(srcDir, link)));
-    const parts = rel.split(/[\\/]/);
-    if (parts.length !== 2) return whole;
-    const [tgtCategory, tgtName] = parts;
-    const newLink = relative(join(OUT_DIR, srcCategory), join(OUT_DIR, tgtCategory, `${tgtName}.md`))
-      .split(/[\\/]/)
-      .join("/");
-    return `](${newLink})`;
+  return body.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (whole, label, link) => {
+    if (/^(https?:|#|mailto:|tel:)/.test(link)) return whole;
+    const [path0, frag] = link.split("#");
+    const anchor = frag ? `#${frag}` : "";
+
+    if (/\/SKILL\.md$/.test(path0)) {
+      const rel = relative(SKILLS_DIR, dirname(resolve(srcDir, path0))).split(/[\\/]/);
+      if (rel.length === 2 && existsSync(join(SKILLS_DIR, rel[0], rel[1], "SKILL.md"))) {
+        const newLink = relative(join(OUT_DIR, srcCategory), join(OUT_DIR, rel[0], `${rel[1]}.md`))
+          .split(/[\\/]/)
+          .join("/");
+        return `[${label}](${newLink}${anchor})`;
+      }
+      return label; // links to a skill we don't publish — drop to plain text
+    }
+
+    // Support file inside the skill's own folder → link to it on GitHub.
+    const relFromSkills = relative(SKILLS_DIR, resolve(srcDir, path0)).split(/[\\/]/).join("/");
+    if (!relFromSkills.startsWith("..") && existsSync(join(SKILLS_DIR, relFromSkills))) {
+      return `[${label}](${REPO_BLOB}/${relFromSkills}${anchor})`;
+    }
+    return whole;
   });
 }
 
