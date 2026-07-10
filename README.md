@@ -38,6 +38,7 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [why](skills/engineering/why/SKILL.md) | Recover the *rationale* behind code from git, tickets, docs, chat, and observability — cited, with confidence calibrated. | inspired by pstack |
 | [deslop](skills/engineering/deslop/SKILL.md) | Strip AI tells from *code* in a diff: stray comments, defensive guards on trusted paths, `any` casts, deep nesting. | inspired by cursor-team-kit |
 | [control-ui](skills/engineering/control-ui/SKILL.md) | Drive a real web/IDE/Electron UI locally to verify behavior with evidence — screenshots, snapshots, profiles, repros. | inspired by cursor-team-kit |
+| [beadflow](skills/engineering/beadflow/SKILL.md) | Turn a prompt into delegated, tracked work: plan gate → beads epic → per-bead model-tier calibration → tiered dispatch and review. | original |
 
 ### productivity
 | Skill | What it does | Source |
