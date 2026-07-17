@@ -40,6 +40,10 @@ yourself and the user would agree with every line. Then write it down.
 
 - [grill-with-docs](../grill-with-docs/SKILL.md) — same interrogation, but it
   captures the decisions as ADRs and a glossary as you go.
+- [grilling-frontend-prototyping](../../engineering/grilling-frontend-prototyping/SKILL.md) —
+  grilling where each question is answered with live UI prototypes, not prose.
+- [prototype](../../engineering/prototype/SKILL.md) — throwaway logic TUI or
+  multi-variant UI mock for a single design question.
 
 ---
 
