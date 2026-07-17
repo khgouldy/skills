@@ -18,7 +18,27 @@ skills by symlinking or copying them into your Claude Code skills directory:
 git clone https://github.com/khgouldy/skills.git
 # copy individual skills into ~/.claude/skills/, e.g.
 cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
+# or symlink so git pull updates Claude immediately:
+# ln -sfn "$(pwd)/skills/engineering/prototype" ~/.claude/skills/prototype
 ```
+
+### Tracking upstream authors (Matt, etc.)
+
+Inspired skills here are **rewrites**, not live mirrors. Pulling this repo does
+not pull Matt Pocock's latest text.
+
+To install and update an author's original skills into your agent:
+
+```bash
+npx skills@latest add mattpocock/skills -g -s prototype -s grilling -y
+npx skills@latest add will-ness-ai/skills -g -s grilling-frontend-prototyping -y
+# later:
+npx skills update -g -y
+```
+
+Or use the author's Claude Code plugin (always-current, not meant for forking).
+When you want a change reflected *in this library*, read upstream, fold the idea
+into our prose, and bump the skill here.
 
 ## Catalog
 
@@ -39,6 +59,8 @@ cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
 | [deslop](skills/engineering/deslop/SKILL.md) | Strip AI tells from *code* in a diff: stray comments, defensive guards on trusted paths, `any` casts, deep nesting. | inspired by cursor-team-kit |
 | [control-ui](skills/engineering/control-ui/SKILL.md) | Drive a real web/IDE/Electron UI locally to verify behavior with evidence — screenshots, snapshots, profiles, repros. | inspired by cursor-team-kit |
 | [beadflow](skills/engineering/beadflow/SKILL.md) | Turn a prompt into delegated, tracked work: plan gate → beads epic → per-bead model-tier calibration → tiered dispatch and review. | original |
+| [prototype](skills/engineering/prototype/SKILL.md) | Throwaway runnable artifact that answers one design question — logic TUI or multi-variant UI mock. | inspired by Matt Pocock |
+| [grilling-frontend-prototyping](skills/engineering/grilling-frontend-prototyping/SKILL.md) | Grilling session where each question is asked with live UI prototypes, not words. | inspired by will-ness-ai / Matt Pocock |
 
 ### productivity
 | Skill | What it does | Source |
@@ -107,8 +129,11 @@ We write our own prose, but the ideas, framing, and inspiration come from:
 
 - **[Matt Pocock](https://github.com/mattpocock/skills)** — the structure of
   this repo (categories, `SKILL.md` convention, composable skills) and the
-  grilling / TDD / diagnosing / handoff / writing-skills ideas all trace back to
-  his excellent public skills repo.
+  grilling / TDD / diagnosing / handoff / writing-skills / prototype ideas all
+  trace back to his excellent public skills repo.
+- **[will-ness-ai](https://github.com/will-ness-ai/skills)** — the
+  `grilling-frontend-prototyping` composition (grilling + live UI variants) is
+  inspired by their fork of Matt's skills set.
 - **Jeffrey** — concurrency-bug hunting and metamorphic testing are inspired by
   his skills catalog.
 - **[Warp](https://github.com/warpdotdev/common-skills)** — the PR-creation,
