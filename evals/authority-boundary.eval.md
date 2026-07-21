@@ -16,3 +16,6 @@ envelope is `whole-job`. Evidence of success is `prove-the-outcome`.
 - "attach evidence that the deploy is healthy" — _expected: prove-the-outcome_
 - "what could this credential-handling change break?" — _expected: blast-radius_
 - "improve why agents can't reach Slack without me pasting messages" — _expected: improve-harness_
+- "don't ship a workaround; finish the permanent fix" — _expected: boil-the-ocean_
+- "open a PR with a focused description" — _expected: create-pr_
+- "we keep force-merging — make a durable rule against it" — _expected: feedback-to-infrastructure_

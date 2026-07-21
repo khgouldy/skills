@@ -19,3 +19,4 @@ Permanent fix vs workaround is `boil-the-ocean`. Claim-matched evidence alone is
 - "open a PR with a good description" — _expected: create-pr_
 - "force push to main to finish" — _expected: authority-boundary_
 - "agents keep failing the same setup step" — _expected: improve-harness_
+- "agents always stop before opening the PR — promote a guardrail" — _expected: feedback-to-infrastructure_

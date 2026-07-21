@@ -1,6 +1,6 @@
 ---
 name: authority-boundary
-description: Use when an action could merge, deploy, touch secrets, mutate production/shared state, or otherwise cross a consequential boundary — separate capability (how) from authority (who/may), prefer reversible work, and interpret instructions through the protected path. Triggers include merge, deploy, production, credentials, "just force it", admin bypass, irreversible data changes, or any moment "I can" is about to substitute for "I'm allowed."
+description: Use when an action could merge, deploy, touch secrets, mutate production/shared state, or otherwise cross a consequential boundary — separate capability (how) from authority (who/may) and prefer the protected path. Triggers include "just force it", admin bypass, paste the API key, widen scopes, or irreversible prod changes. Not for routine PR opening (create-pr), finishing a partial solution (boil-the-ocean), or claim-matched proof alone (prove-the-outcome).
 ---
 
 # Authority boundary
@@ -94,6 +94,13 @@ model should cover direct commands, scheduled work, and higher-level tools.
 3. Is there a reversible or staged path first?
 4. What evidence will prove success — and what is the recovery if it fails?
 5. If any answer is missing, stop and ask or prepare; do not cross.
+
+## Pairs with
+
+- [whole-job](../../productivity/whole-job/SKILL.md) — delivery inside an allowed envelope
+- [prove-the-outcome](../prove-the-outcome/SKILL.md) — evidence the effect actually landed
+- [create-pr](../create-pr/SKILL.md) / [fixing-and-merging-prs](../fixing-and-merging-prs/SKILL.md) — normal PR path, not bypass
+- [feedback-to-infrastructure](../feedback-to-infrastructure/SKILL.md) — when can-vs-may confusion keeps recurring
 
 ---
 

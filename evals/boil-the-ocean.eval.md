@@ -19,3 +19,5 @@ at the source of a bug (not a guard) is `fix-root-causes`.
 - "just add a null check so it stops throwing" — _expected: fix-root-causes_
 - "agents keep failing the same setup step" — _expected: improve-harness_
 - "open a PR with a focused description" — _expected: create-pr_
+- "just force merge, checks are flaky" — _expected: authority-boundary_
+- "every agent leaves tests for later — make that impossible" — _expected: feedback-to-infrastructure_

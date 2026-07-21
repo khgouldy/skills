@@ -1,6 +1,6 @@
 ---
 name: whole-job
-description: Use when work stops at "code written" or "tests pass" before the real outcome is closed — own the full trajectory through proof, review, delivery, and post-verify when authority allows. Triggers include finishing an implementation without a PR, "I fixed it locally", skipping CI/review response, or treating merge/deploy as someone else's problem when you can drive the protected path.
+description: Use when the trajectory stops short of closing the outcome — implementation done but no PR, CI/review abandoned, or merge/deploy treated as someone else's job when you can drive the protected path. Triggers include "I fixed it locally", "someone else can merge", skipping CI, or handoff before post-verify. Not for claim-matched evidence alone (prove-the-outcome), permanent-fix vs workaround (boil-the-ocean), or just opening a PR (create-pr).
 ---
 
 # Whole job
@@ -13,12 +13,14 @@ Humans still provide direction, judgment, and consequential authority. You own
 everything inside that envelope until the accepted outcome is evidenced — not
 until the patch merely exists.
 
-This is *lifecycle ownership*. For completeness of the *solution* (tests, docs,
-permanent fix vs workaround), use
-[boil-the-ocean](../boil-the-ocean/SKILL.md). For claim-matched evidence, use
-[prove-the-outcome](../../engineering/prove-the-outcome/SKILL.md). For
-permission boundaries on merge/deploy/secrets, use
-[authority-boundary](../../engineering/authority-boundary/SKILL.md).
+This is *lifecycle ownership*:
+
+| Neighbor | Use instead when |
+|---|---|
+| [boil-the-ocean](../boil-the-ocean/SKILL.md) | Partial *solution* (workaround, missing tests/docs) while the permanent fix is in reach |
+| [prove-the-outcome](../../engineering/prove-the-outcome/SKILL.md) | Internal green is faking the user/ops claim |
+| [create-pr](../../engineering/create-pr/SKILL.md) | Need a reviewable PR artifact, not full delivery ownership |
+| [authority-boundary](../../engineering/authority-boundary/SKILL.md) | Can vs may at merge/deploy/secrets |
 
 ## Sparse prompt, high bar
 
@@ -43,9 +45,10 @@ Decompose into dependency-aware, independently provable pieces when the work is
 large — still keep one owner for the complete result. Plans are executable
 context; they are not the shipped artifact.
 
-## Lifecycle checklist (software work)
+## Lifecycle checklist
 
-Close the loop when the job warrants it and authority allows:
+**Software delivery** (when the outcome is a merged/shipped change and authority
+allows):
 
 1. Retrieve relevant context and name the accepted outcome
 2. Reproduce or inspect current behavior
@@ -57,6 +60,10 @@ Close the loop when the job warrants it and authority allows:
 8. Obtain required approval
 9. Merge, release, or deploy via the **normal protected path**
 10. Verify the user-visible or operational result after delivery
+
+**Non-shipping jobs** (analysis, experiment, decision): close with the
+evidence and recommendation the ask required — do not invent a PR or deploy
+theater. Still name what was not done and who owns any follow-up.
 
 Stop early only when blocked on judgment or authority you do not have — and say
 exactly what is blocked.

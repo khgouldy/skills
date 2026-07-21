@@ -1,6 +1,6 @@
 ---
 name: boil-the-ocean
-description: Use when the permanent, complete solution is within reach and you're tempted to ship a partial one — to resist "good enough", workarounds, and "let's table this for later." Triggers include any moment you're about to offer a stopgap, leave a thread dangling, or hand back a plan instead of the finished thing.
+description: Use when the permanent, complete solution is within reach and you're tempted to ship a partial one — stopgap, missing tests/docs, "table for later", or a plan instead of the finished thing. Not for owning PR→merge→verify (whole-job), matching evidence to a product claim (prove-the-outcome), or opening a PR (create-pr).
 ---
 
 # Boil the Ocean
@@ -8,6 +8,11 @@ description: Use when the permanent, complete solution is within reach and you'r
 The marginal cost of completeness is near zero with an agent. Do the whole
 thing. Do it right. Do it with tests and documentation. The bar is not "good
 enough" — it's "this is genuinely, completely done."
+
+This is completeness of the *solution* (scope and quality of what you build).
+For completeness of the *trajectory* (proof, PR, merge, post-verify), use
+[whole-job](../whole-job/SKILL.md). For claim-matched evidence, use
+[prove-the-outcome](../../engineering/prove-the-outcome/SKILL.md).
 
 ## The standard
 
@@ -44,6 +49,13 @@ complexity gate so the effort matches the job. Completeness ≠ scope creep.
 
 Before calling something done, ask: would a sharp reviewer be *impressed*, or
 merely *satisfied*? If only satisfied, there's more to do.
+
+## Pairs with
+
+- [whole-job](../whole-job/SKILL.md) — close delivery, not only the solution
+- [prove-the-outcome](../../engineering/prove-the-outcome/SKILL.md) — evidence at the claim boundary
+- [fix-root-causes](../../engineering/fix-root-causes/SKILL.md) — permanent fix at the source, not a guard
+- [create-pr](../../engineering/create-pr/SKILL.md) — when the finished work still needs a reviewable PR
 
 ---
 

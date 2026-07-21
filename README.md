@@ -16,10 +16,19 @@ skills by symlinking or copying them into your Claude Code skills directory:
 
 ```bash
 git clone https://github.com/khgouldy/skills.git
-# copy individual skills into ~/.claude/skills/, e.g.
-cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
-# or symlink so git pull updates Claude immediately:
-# ln -sfn "$(pwd)/skills/engineering/prototype" ~/.claude/skills/prototype
+cd skills
+# symlink every skill into ~/.claude/skills (idempotent):
+node scripts/link-skills.mjs
+# also link into a sibling agent-hub/skills tree:
+# node scripts/link-skills.mjs --also agent-hub
+# dry-run:
+# node scripts/link-skills.mjs --dry-run
+```
+
+Or link a single skill by hand:
+
+```bash
+ln -sfn "$(pwd)/skills/engineering/prototype" ~/.claude/skills/prototype
 ```
 
 ### Tracking upstream authors (Matt, etc.)

@@ -111,6 +111,8 @@ principles with little steal risk may omit a sheet until a neighbor names them.
 | [reviewing-sql](./ab/reviewing-sql.ab.md) | Catch hidden join fan-out? |
 | [recon-before-action](./ab/recon-before-action.ab.md) | Pick highest-leverage extraction? |
 | [building-data-pipelines](./ab/building-data-pipelines.ab.md) | Design idempotency/backfill unprompted? |
+| [prove-the-outcome](./ab/prove-the-outcome.ab.md) | Refuse merge-on-unit-green for a UI claim? |
+| [authority-boundary](./ab/authority-boundary.ab.md) | Refuse force/admin merge when checks fail? |
 
 ## Collision clusters (map)
 

@@ -1,6 +1,6 @@
 ---
 name: feedback-to-infrastructure
-description: Use when the same correction, review comment, or human relay keeps recurring — promote the lesson into the smallest durable owner (doc, skill, type, lint, test, architecture) and clean up the population, not just the instance. Triggers include "we keep telling agents this", "document this so it doesn't happen again", the same review note twice, repeated steering mid-task, or turning a one-off fix into a permanent guardrail.
+description: Use when the same correction, review comment, or human relay keeps recurring — promote the lesson into the smallest durable owner (doc, skill, type, lint, test, architecture) and clean the failure class, not just the instance. Triggers include "we keep telling agents this", "document this so it doesn't happen again", the same review note twice, or turning a one-off fix into a permanent guardrail. Not for a full baseline→rerun environment experiment (improve-harness), one-off bug root cause (diagnosing-bugs / fix-root-causes), or a single deslop pass.
 ---
 
 # Feedback to infrastructure
@@ -11,8 +11,12 @@ the bad shape becomes hard or impossible.
 
 This is the *promote the lesson* ladder. For a single bug's root cause, use
 [fix-root-causes](../fix-root-causes/SKILL.md) and
-[diagnosing-bugs](../diagnosing-bugs/SKILL.md). For a full baseline→rerun
-environment experiment, use [improve-harness](../improve-harness/SKILL.md).
+[diagnosing-bugs](../diagnosing-bugs/SKILL.md).
+
+**When the gap is the environment** (missing context, tool, proof route, or
+authority) and you need a measured experiment — baseline, smallest intervention,
+fresh-session rerun — run `/improve-harness` (user-invoked). This skill encodes
+the lesson; that playbook proves the intervention stuck.
 
 ## Recover the failure class, not the line
 
@@ -105,11 +109,14 @@ rules.
 
 ## Pairs with
 
+- [improve-harness](../improve-harness/SKILL.md) — measured environment experiment (user-invoked)
 - [fix-root-causes](../fix-root-causes/SKILL.md) — refuse symptom band-aids on the instance
 - [deslop](../deslop/SKILL.md) / [unslop](../../productivity/unslop/SKILL.md) — clean the artifact; this skill hardens the environment so slop recurs less
+- [prove-the-outcome](../prove-the-outcome/SKILL.md) — when the recurring gap is weak proof
+- [whole-job](../../productivity/whole-job/SKILL.md) — when agents keep stopping before delivery
+- [authority-boundary](../authority-boundary/SKILL.md) — when can vs may keeps getting blurred
 - [writing-great-skills](../../misc/writing-great-skills/SKILL.md) — when the right owner is a skill
 - [redesign-from-first-principles](../redesign-from-first-principles/SKILL.md) — when the class exposes the wrong shape
-- [improve-harness](../improve-harness/SKILL.md) — when you need a measured environment experiment
 
 ---
 

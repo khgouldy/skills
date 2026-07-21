@@ -19,3 +19,4 @@ CI/merge/post-verify is `whole-job`. Sweeping many open PRs is
 - "just force merge, checks are flaky" — _expected: authority-boundary_
 - "tests are green so the product claim is proven" — _expected: prove-the-outcome_
 - "fix the merge conflicts on this branch first" — _expected: resolve-merge-conflicts_
+- "don't table the tests; finish the permanent solution" — _expected: boil-the-ocean_

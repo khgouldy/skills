@@ -1,6 +1,6 @@
 ---
 name: prove-the-outcome
-description: Use when about to claim work is done, open a PR, ship, or say "tests pass so we're good" — match evidence to the user or operational claim, not just internal green. Triggers include "done", "ready to merge", "tests are green", "should be fine", shipping a deploy, or any moment internal checks are being treated as proof of the real outcome.
+description: Use when internal green (unit tests, build, upload) is about to stand in for the user or operational claim — match evidence to that claim. Triggers include "tests are green so we're good", "build passed, ship it", "upload finished, call it deployed", or equating coverage/CI with the real outcome. Not for opening a PR (create-pr), owning merge/delivery (whole-job), or finishing a partial solution (boil-the-ocean).
 ---
 
 # Prove the outcome
@@ -9,10 +9,17 @@ A change is complete when evidence shows the promised result where a user,
 operator, or dependent system will rely on it. Green unit tests prove unit
 tests. Map each claim to evidence at that claim's boundary.
 
-This is the *claim → evidence* discipline. For driving a real browser/UI to
-collect that evidence, use [control-ui](../control-ui/SKILL.md). For "what else
-could this break," use [blast-radius](../blast-radius/SKILL.md). For test-first
-implementation, use [tdd](../tdd/SKILL.md).
+This is the *claim → evidence* discipline — not PR hygiene, not lifecycle
+ownership, not "finish the permanent fix."
+
+| Neighbor | Use instead when |
+|---|---|
+| [control-ui](../control-ui/SKILL.md) | You need to *drive* a real UI to collect evidence |
+| [blast-radius](../blast-radius/SKILL.md) | "What else could this break?" |
+| [tdd](../tdd/SKILL.md) | Implementing test-first |
+| [create-pr](../create-pr/SKILL.md) | Opening the PR artifact |
+| [whole-job](../../productivity/whole-job/SKILL.md) | Trajectory stopped before delivery/closure |
+| [boil-the-ocean](../../productivity/boil-the-ocean/SKILL.md) | Workaround / partial ship when the real fix is in reach |
 
 ## Name the claim before you collect evidence
 
@@ -59,7 +66,13 @@ If you only have a proxy, say so. Narrow the claim or get the missing evidence.
 
 ## Attach a proof packet
 
-Before asking for review or calling done, attach what a scarce human needs:
+**Minimum packet** (always):
+
+1. Claim in one sentence
+2. One claim-matched artifact (command output, screenshot, log, recon, health check)
+3. What remains unproved
+
+**Full packet** when asking for review or shipping something consequential:
 
 1. Intended outcome and affected boundary
 2. Material design and risk decisions

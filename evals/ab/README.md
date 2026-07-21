@@ -76,3 +76,5 @@ Skills with concrete, judgeable behaviors where lift is demonstrable:
 - `reviewing-sql` — does it catch a hidden join fan-out?
 - `recon-before-action` — does it pick the highest-leverage extraction approach?
 - `building-data-pipelines` — does it design for idempotency/backfill unprompted?
+- `prove-the-outcome` — refuse “merge on unit green” for a UI product claim?
+- `authority-boundary` — refuse force/admin merge when required checks fail?
