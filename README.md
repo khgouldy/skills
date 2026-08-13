@@ -16,10 +16,19 @@ skills by symlinking or copying them into your Claude Code skills directory:
 
 ```bash
 git clone https://github.com/khgouldy/skills.git
-# copy individual skills into ~/.claude/skills/, e.g.
-cp -r skills/skills/engineering/recon-before-action ~/.claude/skills/
-# or symlink so git pull updates Claude immediately:
-# ln -sfn "$(pwd)/skills/engineering/prototype" ~/.claude/skills/prototype
+cd skills
+# symlink every skill into ~/.claude/skills (idempotent):
+node scripts/link-skills.mjs
+# also link into a sibling agent-hub/skills tree:
+# node scripts/link-skills.mjs --also agent-hub
+# dry-run:
+# node scripts/link-skills.mjs --dry-run
+```
+
+Or link a single skill by hand:
+
+```bash
+ln -sfn "$(pwd)/skills/engineering/prototype" ~/.claude/skills/prototype
 ```
 
 ### Tracking upstream authors (Matt, etc.)
@@ -61,6 +70,10 @@ into our prose, and bump the skill here.
 | [beadflow](skills/engineering/beadflow/SKILL.md) | Turn a prompt into delegated, tracked work: plan gate → beads epic → per-bead model-tier calibration → tiered dispatch and review. | original |
 | [prototype](skills/engineering/prototype/SKILL.md) | Throwaway runnable artifact that answers one design question — logic TUI or multi-variant UI mock. | inspired by Matt Pocock |
 | [grilling-frontend-prototyping](skills/engineering/grilling-frontend-prototyping/SKILL.md) | Grilling session where each question is asked with live UI prototypes, not words. | inspired by will-ness-ai / Matt Pocock |
+| [improve-harness](skills/engineering/improve-harness/SKILL.md) | Improve the environment around a fixed model: baseline a job, find the earliest gap, make the smallest reversible intervention, fresh-rerun, retain/revise/remove. | inspired by Ryan Lopopolo / harness-engineering |
+| [prove-the-outcome](skills/engineering/prove-the-outcome/SKILL.md) | Match evidence to the user/ops claim before calling work done — internal green is not enough. | inspired by Ryan Lopopolo / harness-engineering |
+| [feedback-to-infrastructure](skills/engineering/feedback-to-infrastructure/SKILL.md) | Promote recurring corrections into the smallest durable owner and clean the failure class, not just the instance. | inspired by Ryan Lopopolo / harness-engineering |
+| [authority-boundary](skills/engineering/authority-boundary/SKILL.md) | Separate capability (how) from authority (who/may) at merge, deploy, secrets, and other consequential boundaries. | inspired by Ryan Lopopolo / harness-engineering |
 
 ### productivity
 | Skill | What it does | Source |
@@ -72,6 +85,7 @@ into our prose, and bump the skill here.
 | [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
 | [unslop](skills/productivity/unslop/SKILL.md) | Strip AI tells from *prose* and add a human voice — docs, PRs, comments, reports. | inspired by pstack |
 | [show-me-your-work](skills/productivity/show-me-your-work/SKILL.md) | Keep a reviewable decision-trail log (one TSV row per decision) for long or unattended work. | inspired by pstack |
+| [whole-job](skills/productivity/whole-job/SKILL.md) | Own the full trajectory through proof, review, delivery, and post-verify — don't stop at "code written." | inspired by Ryan Lopopolo / harness-engineering |
 
 ### data
 | Skill | What it does | Source |
@@ -104,6 +118,20 @@ moment rather than running a procedure. They live under `engineering/` and
 | [make-operations-idempotent](skills/engineering/make-operations-idempotent/SKILL.md) | Design operations to converge to the same end state across crashes, restarts, and retries. | inspired by pstack |
 | [fix-root-causes](skills/engineering/fix-root-causes/SKILL.md) | Fix at the source; refuse guards that just silence a symptom. | inspired by pstack |
 | [experience-first](skills/productivity/experience-first/SKILL.md) | Choose the consumer's experience over implementation convenience; ship fewer, more polished things. | inspired by pstack |
+
+### harness (cross-cutting)
+
+Environment-loop skills distilled from harness engineering. They sit in
+`engineering/` and `productivity/` above but form a family: hold the worker
+fixed, improve context/tools/authority/proof/feedback, close whole jobs.
+
+| Skill | What it does | Source |
+|---|---|---|
+| [improve-harness](skills/engineering/improve-harness/SKILL.md) | Bounded baseline → gap → intervention → fresh rerun | harness-engineering |
+| [prove-the-outcome](skills/engineering/prove-the-outcome/SKILL.md) | Claim-matched evidence at the real boundary | harness-engineering |
+| [feedback-to-infrastructure](skills/engineering/feedback-to-infrastructure/SKILL.md) | Recurring pain → durable owner + class cleanup | harness-engineering |
+| [whole-job](skills/productivity/whole-job/SKILL.md) | Lifecycle ownership through delivery | harness-engineering |
+| [authority-boundary](skills/engineering/authority-boundary/SKILL.md) | Can vs may at consequential gates | harness-engineering |
 
 ## Work in progress
 
@@ -148,6 +176,12 @@ We write our own prose, but the ideas, framing, and inspiration come from:
 - **[Cursor](https://github.com/cursor/plugins/tree/main/cursor-team-kit)** — the
   `deslop` and `control-ui` skills are inspired by Cursor's MIT-licensed
   `cursor-team-kit` plugin.
+- **[Ryan Lopopolo](https://github.com/lopopolo/harness-engineering)** and the
+  OpenAI [Harness engineering](https://openai.com/index/harness-engineering/)
+  essay — the `improve-harness`, `prove-the-outcome`,
+  `feedback-to-infrastructure`, `whole-job`, and `authority-boundary` skills
+  distill ideas from that CC BY 4.0 corpus and related writing; prose here is
+  our own rewrite for this library's skill shape.
 
 If your work inspired a skill here and you'd like different (or no) attribution,
 open an issue — happy to adjust.

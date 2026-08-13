@@ -11,7 +11,7 @@ Finalize each open PR: take it from red CI to **merged**, looping review→fix u
 
 **Core principle: prove the PR is unowned BEFORE you touch it, re-prove it BEFORE you push, and stand down rather than race.**
 
-**Merge authorization:** invoking this skill *is* the user's authorization to auto-merge. A PR merges automatically once it is **(a) unowned, (b) all required checks green, and (c) every review finding addressed** — all three. This is the named exception to the usual "ask before merging" default; it applies only to PRs that pass the ownership gate.
+**Merge authorization:** invoking this skill *is* the user's authorization to auto-merge. A PR merges automatically once it is **(a) unowned, (b) all required checks green, and (c) every review finding addressed** — all three. This is the named exception to the usual "ask before merging" default; it applies only to PRs that pass the ownership gate. Still use the **protected merge path** — never force-push over others, admin-bypass required checks, or widen credentials to land a PR. See [authority-boundary](../authority-boundary/SKILL.md).
 
 ## The Loop
 
@@ -94,6 +94,13 @@ The `claude-review` check posts findings as PR comments (author = the review bot
 
 - **Stand down + report** when every open PR is owned (the task's premise — idle PRs exist — is false). Auto-merge does **not** override the ownership gate.
 - **Ask** only when ownership is genuinely ambiguous (offer: stand down / finalize a specific named PR / pause an agent's worktree first). A clean, unowned, green PR needs no ask — invoking this skill already authorized the merge.
+
+## Pairs with
+
+- [create-pr](../create-pr/SKILL.md) — opening one reviewable PR
+- [authority-boundary](../authority-boundary/SKILL.md) — protected path; no force/admin bypass
+- [whole-job](../../productivity/whole-job/SKILL.md) — single-outcome ownership including post-verify
+- [prove-the-outcome](../prove-the-outcome/SKILL.md) — green CI is not always the product claim
 
 ---
 

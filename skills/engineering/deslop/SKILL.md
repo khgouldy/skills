@@ -35,6 +35,14 @@ fixes *prose* tells, deslop fixes *code* tells.
   this file," not "what I'd write greenfield."
 - Keep the final summary to a sentence or two.
 
+## When the same slop keeps coming back
+
+Cleaning one diff is deslop. If every agent run reintroduces the same shape
+(defensive guards on trusted paths, `any` casts, comment narration), promote the
+lesson with
+[feedback-to-infrastructure](../feedback-to-infrastructure/SKILL.md) — lint,
+example, or type that makes the bad shape hard to repeat.
+
 ---
 
 _Inspired by the `deslop` skill in Cursor's [cursor-team-kit](https://github.com/cursor/plugins/tree/main/cursor-team-kit). Prose is our own._
