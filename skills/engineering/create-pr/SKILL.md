@@ -45,8 +45,14 @@ not to read an essay.
 ## Opening it
 
 - Use the repo's PR template if one exists.
-- Mark it **draft** if it isn't ready for real review yet — don't make people
-  review a moving target.
+- **Default to draft. Always.** Agent-heavy private repos (OPA, rosterhq, …)
+  burn org-shared GitHub Actions / Blacksmith minutes when non-draft PRs are
+  opened or force-pushed. Prefer repo wrappers when present:
+  - `npm run pr:open` → always draft
+  - `npm run pr:ready` → local gate stamp, then undraft + deliberate CI label
+  - Otherwise: `gh pr create --draft …`
+  Only promote when the local suite is green **and** the user wants a merge
+  stamp / human review — never open ready “to see if CI passes.”
 - Title: imperative and specific (`Fix token drop on cross-host redirect`), not
   `updates` or `wip`.
 
