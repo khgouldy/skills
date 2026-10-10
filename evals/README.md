@@ -147,6 +147,7 @@ DESIGN / PLAN
   exhaust-the-design-space ↔  arena, cross-critique, prototype, grilling
   cross-critique           ↔  grilling, exhaust-the-design-space, arena, blast-radius
   grilling                 ↔  cross-critique, grill-with-docs, handoff, diagnosing-bugs
+  handoff                  ↔  beadflow, show-me-your-work, why, create-pr, unslop
 
 HARNESS
   improve-harness            ↔  feedback-to-infrastructure, whole-job, prove-the-outcome,
@@ -175,7 +176,7 @@ Prefer 4–6 should-fire and 4–6 should-NOT cases. Every should-NOT should nam
 Still optional (low collision / quiet principles): `experience-first`,
 `foundational-thinking`, `minimize-reader-load`, `make-operations-idempotent`,
 `redesign-from-first-principles`, `metamorphic-testing`, `beadflow`,
-`handoff`, `show-me-your-work`, `writing-great-skills`, most pure data utilities
+`show-me-your-work`, `writing-great-skills`, most pure data utilities
 already only referenced as `expected:` from neighbors
 (`data-quality-checks`, `dimensional-modeling`, `bigquery-superpowers` — add when
 they start stealing).
