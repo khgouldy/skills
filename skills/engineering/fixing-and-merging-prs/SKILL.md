@@ -19,13 +19,34 @@ Sweep all open PRs oldest-first. For each one, run this loop to completion befor
 
 1. **List candidates oldest-first.** `gh pr list --state open --json number,title,headRefName,createdAt,isDraft,author` → sort by `createdAt`.
 2. **Ownership check (gate — see below).** Skip any PR with active agent work. If *all* are owned, **stand down and report** — do not pick "the least active."
-3. **Diagnose CI.** Pull the failing job logs; find the root cause.
+2b. **Draft discipline.** In repos where draft PRs skip CI, a draft is intentional. Do not `gh pr ready` a draft just to "kick CI." If a draft is otherwise mergeable work you own: check out the branch, run `npm run agent-gate` (or repo equivalent), then `npm run pr:ready` (preferred) so the local stamp is real. Bare undraft without a local gate burns shared CI minutes and skips the author loop.
+3. **Diagnose CI.** Pull the failing job logs; find the root cause. If CI never ran because the PR is still draft or missing the `run-ci` label after a post-ready push, fix process (`npm run pr:ready`) rather than re-enabling `synchronize` triggers.
 4. **Fix at the source.** Prefer fixing the generator/config/code that produces the failure over patching its output.
 5. **Verify locally** with the *exact* command CI runs, before pushing.
 6. **Re-verify ownership, then push** (step 2 again — agents resume).
 7. **Claude-review loop.** Wait for the `claude-review` check + bot comments; address every finding (fix or explicitly justify); push; repeat until the check is green and **no** unaddressed findings remain.
 8. **Auto-merge.** Confirm the PR is still unowned, **every** required check is green (`gh pr checks <n>` — not just `claude-review`), and no findings are open. Then merge: `gh pr merge <n> --squash --delete-branch`. Use `--auto` instead if you want GitHub to gate the merge on required checks itself. Do **not** merge if any of the three conditions fails — re-enter the loop or stand down.
-9. **Next PR.** Move to the next oldest unowned PR and repeat from step 2 until the open queue is empty or every remaining PR is owned.
+9. **Linear status sync (when the repo tracks work in Linear).** Immediately after the PR reaches a terminal outcome for this sweep, update the linked Linear ticket (see below). Skipping Linear is an incomplete finalize — same severity as skipping the merge report.
+10. **Next PR.** Move to the next oldest unowned PR and repeat from step 2 until the open queue is empty or every remaining PR is owned.
+
+## Linear status sync
+
+Skip this section in repos that do not use Linear. Ticket tracking must match GitHub reality after every finalize action. Resolve the ticket key from (in order): PR title/body (`PAR-####`), branch name, commit messages, or existing Linear attachments/links on the PR.
+
+| Outcome this step produced | Linear state | Also |
+|----------------------------|--------------|------|
+| PR **merged** to default branch | **Done** | Comment with PR URL + merge SHA if known; ensure PR link is attached on the issue |
+| PR still open; you are actively fixing CI/review | **In Progress** | Comment with what failed / what you're doing |
+| PR still open; only waiting on CI or human review (no code left) | **In Review** | Attach PR URL if missing |
+| Blocked on a product/infra decision (not code) | **Needs Input** | Comment listing the decision(s) as multi-choice bullets |
+| Skipped — owned by another agent | **leave unchanged** | Do not touch Linear for that ticket |
+
+**Rules:**
+- Never mark **Done** while the PR is still open.
+- Never leave a merged PR's ticket in **In Review** / **In Progress** / **Needs Input**.
+- If multiple tickets are linked, update **each** one that this PR fully satisfies; for partial delivery, comment residual scope and leave non-complete tickets open with accurate state.
+- Prefer Linear MCP (`save_issue` for `state` + `links`, `save_comment` for the note). Fall back to `linear` CLI only if MCP is unavailable.
+- Report in the final table: `PR # → title → outcome → Linear KEY (status)`.
 
 ## Ownership Check — the gate that prevents collisions
 
@@ -78,6 +99,8 @@ The `claude-review` check posts findings as PR comments (author = the review bot
 - "claude-review is green, so I'll merge" → **check ALL required checks (`gh pr checks`), not just the review bot.**
 - "There's one open finding but it's minor, I'll merge anyway" → **no. Every finding addressed first, or don't merge.**
 - Auto-merging a PR that's owned by another agent → **the merge gate requires unowned. Re-check ownership at step 8.**
+- "PR merged, Linear later" → **no. Linear sync is step 9 of the same loop; Done only after merge.**
+- "Marked Done while the PR is still open" → **wrong state. In Review until merge.**
 
 ## Common Mistakes
 
@@ -89,6 +112,8 @@ The `claude-review` check posts findings as PR comments (author = the review bot
 | Eyeball the lint fix | Style rules (quote style, `useLiteralKeys`, semicolons) are exact. Run the pinned tool. |
 | Merge on a green review bot alone | `claude-review` green ≠ CI green. Gate on ALL required checks via `gh pr checks`. |
 | Merge an owned PR because it's green | The auto-merge gate requires unowned. Re-check `git worktree list` at step 8. |
+| Merge without updating Linear | Ticket stays In Review forever; board lies. Always step 9. |
+| Done before merge | Done means on default branch. Open PR → In Review. |
 
 ## When to stand down vs. ask
 

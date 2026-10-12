@@ -20,9 +20,10 @@ the repo's own harness first; assemble a temporary one only if there isn't one.
 ## Setup
 
 1. Start the app with the repo's documented dev command.
-2. Discover existing harnesses first: Playwright/Cypress tests, Storybook, browser
+2. Discover existing harnesses first: Playwright/Cypress **test** suites, Storybook, browser
    scripts, Electron launch scripts, snapshot tooling. Prefer those over anything
-   new. (This environment also exposes a Playwright MCP — use it when it fits.)
+   new. For a live agent-driven browser, use **BetterWright** (MCP `browser` tool or
+   `betterwright run`) — not Playwright MCP.
 3. For a web app, connect to the local URL with the existing tooling.
 4. For Electron/Chromium, launch with `--remote-debugging-port=<port>` and connect
    over CDP.
@@ -33,24 +34,17 @@ the repo's own harness first; assemble a temporary one only if there isn't one.
 
 ## Minimal web probe
 
-If the repo already has Playwright, a one-off probe looks like:
+A one-off live probe uses BetterWright (persistent session, proof screenshot):
 
-```javascript
-import { chromium } from "playwright";
-
-const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
-await page.goto("http://127.0.0.1:<port>");
-await page.getByRole("button", { name: /submit/i }).click();
-await page.screenshot({ path: "/tmp/ui-after.png", fullPage: true });
-await browser.close();
+```bash
+betterwright run -c "await page.goto('http://127.0.0.1:<port>'); await page.getByRole('button', { name: /submit/i }).click(); return screenshot({kind: 'proof', name: 'ui-after'})"
 ```
 
-Don't add Playwright as a project dependency just for a probe unless asked; use
-existing dev dependencies or browser tooling already in the environment. For
-Electron, swap `chromium.launch()` for `chromium.connectOverCDP("http://127.0.0.1:<debug-port>")`,
-then pick the right page by matching a stable app-root selector across the open
-contexts (and if none matches, print the page titles/URLs instead of guessing).
+Inspect the image path in `artifacts` before claiming the UI changed. Don't add
+Playwright as a project dependency just for a probe. Repo Playwright/Cypress
+**test** files stay as CI/E2E. For Electron, attach over CDP with BetterWright's
+provider option, then pick the right page by a stable app-root selector (if none
+matches, print titles/URLs instead of guessing).
 
 ## Interaction loop
 
