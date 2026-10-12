@@ -124,8 +124,7 @@ The `claude-review` check posts findings as PR comments (author = the review bot
 
 - [create-pr](../create-pr/SKILL.md) — opening one reviewable PR
 - [authority-boundary](../authority-boundary/SKILL.md) — protected path; no force/admin bypass
-- [whole-job](../../productivity/whole-job/SKILL.md) — single-outcome ownership including post-verify
-- [prove-the-outcome](../prove-the-outcome/SKILL.md) — green CI is not always the product claim
+- [definition-of-done](../../productivity/definition-of-done/SKILL.md) — single-outcome ownership including post-verify; green CI is not always the product claim
 
 ---
 

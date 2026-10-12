@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: Use when encountering any bug, test failure, or unexpected behavior, before proposing a fix — find the root cause through evidence first instead of guessing. Triggers include "why is this failing", "this isn't working", a stack trace, or a flaky/intermittent failure.
+description: Use when encountering any bug, test failure, or unexpected behavior, before proposing a fix — find the root cause through evidence first instead of guessing — and when you are tempted to silence a symptom with a nil check, a try/catch, or a special case for the one input that breaks. Triggers include "why is this failing", "this isn't working", "just add a guard so it stops crashing", a stack trace, or a flaky/intermittent failure.
 ---
 
 # Diagnosing Bugs
@@ -34,6 +34,16 @@ a symptom you don't understand usually moves the bug rather than removing it.
    passes, and confirm you didn't break anything adjacent. Ideally capture the
    reproduction as a regression test (see [tdd](../tdd/SKILL.md)).
 
+## Fix it at the source
+
+- **Resist the guard reflex.** A nil check that stops a crash treats the
+  symptom. Ask why the value was nil and fix that.
+- **Fix the pattern, not the instance.** Search for the same shape elsewhere and
+  fix every occurrence, not only the one that bit you.
+- **After a restart, suspect state before code.** Code does not change between
+  runs; config, caches, lock files, and serialized state do. If clearing a
+  state file restores the behavior, the real fix is validating that state.
+
 ## Anti-patterns
 
 - **Shotgun debugging** — changing several things at once. Now you don't know
@@ -45,4 +55,4 @@ a symptom you don't understand usually moves the bug rather than removing it.
 
 ---
 
-_Inspired by Matt Pocock's diagnosing-bugs skill (https://github.com/mattpocock/skills). Prose is our own._
+_Inspired by Matt Pocock's diagnosing-bugs skill (https://github.com/mattpocock/skills) and by `principle-fix-root-causes` in Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). Prose is our own._

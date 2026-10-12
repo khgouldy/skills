@@ -1,6 +1,6 @@
 ---
 name: create-pr
-description: Use when opening a pull request for completed work — clean branch, focused diff, description a reviewer can act on. Triggers include "open a PR", "raise a pull request", "submit this for review". Not for owning merge/CI/post-verify (whole-job), claim-matched product proof (prove-the-outcome), force/admin merge (authority-boundary), or sweeping many open PRs (fixing-and-merging-prs).
+description: Use when opening a pull request for completed work — clean branch, focused diff, description a reviewer can act on. Triggers include "open a PR", "raise a pull request", "submit this for review". Not for owning merge/CI/post-verify or claim-matched product proof (definition-of-done), force/admin merge (authority-boundary), or sweeping many open PRs (fixing-and-merging-prs).
 ---
 
 # Create PR
@@ -60,10 +60,9 @@ not to read an essay.
 
 - [fixing-and-merging-prs](../fixing-and-merging-prs/SKILL.md) — take open PRs
   from red CI to merged (fleet-safe).
-- [whole-job](../../productivity/whole-job/SKILL.md) — when the outcome includes
-  owning through merge and post-verify, not only opening the PR.
-- [prove-the-outcome](../prove-the-outcome/SKILL.md) — attach claim-matched
-  evidence in the PR before calling the product claim done.
+- [definition-of-done](../../productivity/definition-of-done/SKILL.md) — when the outcome includes
+  owning through merge and post-verify, and for the claim-matched evidence a PR
+  should carry before the product claim is called done.
 - [authority-boundary](../authority-boundary/SKILL.md) — protected path, not
   force/admin bypass.
 - [resolve-merge-conflicts](../resolve-merge-conflicts/SKILL.md) — when the PR

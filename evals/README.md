@@ -79,7 +79,6 @@ principles with little steal risk may omit a sheet until a neighbor names them.
 | Eval | Cluster |
 |---|---|
 | [diagnosing-bugs](./diagnosing-bugs.eval.md) | debug / “why is this failing?” |
-| [fix-root-causes](./fix-root-causes.eval.md) | debug / symptom vs cause |
 | [why](./why.eval.md) | debug / historical rationale |
 | [finding-concurrency-bugs](./finding-concurrency-bugs.eval.md) | debug / races & locks |
 | [tdd](./tdd.eval.md) | implement / test-first |
@@ -94,14 +93,12 @@ principles with little steal risk may omit a sheet until a neighbor names them.
 | [unslop](./unslop.eval.md) | quality / prose slop |
 | [control-ui](./control-ui.eval.md) | proof / drive real UI |
 | [arena](./arena.eval.md) | design / multi-candidate |
-| [exhaust-the-design-space](./exhaust-the-design-space.eval.md) | design / compare options |
 | [cross-critique](./cross-critique.eval.md) | design / red-team a decision |
 | [grilling](./grilling.eval.md) | plan / stress-test |
-| [boil-the-ocean](./boil-the-ocean.eval.md) | finish / permanent solution |
+| [definition-of-done](./definition-of-done.eval.md) | finish / finished, proven, delivered |
+| [prototype](./prototype.eval.md) | design / throwaway sketch, compare options |
 | [improve-harness](./improve-harness.eval.md) | harness / environment loop |
-| [prove-the-outcome](./prove-the-outcome.eval.md) | harness / claim-matched proof |
 | [feedback-to-infrastructure](./feedback-to-infrastructure.eval.md) | harness / promote lessons |
-| [whole-job](./whole-job.eval.md) | harness / lifecycle ownership |
 | [authority-boundary](./authority-boundary.eval.md) | harness / can vs may |
 
 ### A/B lift fixtures ([`ab/`](./ab/))
@@ -111,7 +108,7 @@ principles with little steal risk may omit a sheet until a neighbor names them.
 | [reviewing-sql](./ab/reviewing-sql.ab.md) | Catch hidden join fan-out? |
 | [recon-before-action](./ab/recon-before-action.ab.md) | Pick highest-leverage extraction? |
 | [building-data-pipelines](./ab/building-data-pipelines.ab.md) | Design idempotency/backfill unprompted? |
-| [prove-the-outcome](./ab/prove-the-outcome.ab.md) | Refuse merge-on-unit-green for a UI claim? |
+| [definition-of-done](./ab/definition-of-done.ab.md) | Refuse merge-on-unit-green for a UI claim? |
 | [authority-boundary](./ab/authority-boundary.ab.md) | Refuse force/admin merge when checks fail? |
 
 ## Collision clusters (map)
@@ -120,50 +117,39 @@ Edges mean “these descriptions must not steal each other’s prompts.”
 
 ```text
 DEBUG
-  diagnosing-bugs  ↔  reviewing-sql, finding-concurrency-bugs, fix-root-causes,
-                      why, tdd, bigquery-superpowers, dbt-incremental-models
-  fix-root-causes  ↔  diagnosing-bugs, why, tdd, blast-radius, finding-concurrency-bugs
-  why              ↔  diagnosing-bugs, fix-root-causes, blast-radius, reviewing-sql
+  diagnosing-bugs            ↔  reviewing-sql, finding-concurrency-bugs, why, tdd, bigquery-superpowers, dbt-incremental-models, blast-radius
+  why                        ↔  diagnosing-bugs, blast-radius, reviewing-sql
 
 DATA
-  recon-before-action     ↔  building-data-pipelines, writing-dbt-models,
-                             bigquery-superpowers, data-quality-checks
-  building-data-pipelines ↔  recon-before-action, reviewing-sql, writing-dbt-models,
-                             data-quality-checks, bigquery-superpowers
-  writing-dbt-models      ↔  dbt-incremental-models, dimensional-modeling, reviewing-sql
-  dbt-incremental-models  ↔  writing-dbt-models, dimensional-modeling, reviewing-sql
-  reviewing-sql           ↔  diagnosing-bugs, data-quality-checks, bigquery-superpowers
+  recon-before-action        ↔  building-data-pipelines, writing-dbt-models, bigquery-superpowers, data-quality-checks
+  building-data-pipelines    ↔  recon-before-action, reviewing-sql, writing-dbt-models, data-quality-checks, bigquery-superpowers
+  writing-dbt-models         ↔  dbt-incremental-models, dimensional-modeling, reviewing-sql
+  dbt-incremental-models     ↔  writing-dbt-models, dimensional-modeling, reviewing-sql
+  reviewing-sql              ↔  diagnosing-bugs, data-quality-checks, bigquery-superpowers
 
 SHIP / QUALITY
-  blast-radius  ↔  diagnosing-bugs, why, fix-root-causes, arena
-  create-pr     ↔  whole-job, fixing-and-merging-prs, authority-boundary,
-                   prove-the-outcome, resolve-merge-conflicts
-  deslop        ↔  unslop, diagnosing-bugs
-  unslop        ↔  deslop, create-pr, feedback-to-infrastructure
-  control-ui    ↔  prove-the-outcome, diagnosing-bugs, blast-radius, tdd
-  create-verification-skill ↔  maintain-verification-skill, control-ui, prove-the-outcome, tdd
-  preflight     ↔  diagnosing-bugs, recon-before-action, control-ui
+  blast-radius               ↔  diagnosing-bugs, why, arena
+  create-pr                  ↔  definition-of-done, fixing-and-merging-prs, authority-boundary, resolve-merge-conflicts
+  deslop                     ↔  unslop, diagnosing-bugs
+  unslop                     ↔  deslop, create-pr, feedback-to-infrastructure
+  control-ui                 ↔  definition-of-done, diagnosing-bugs, blast-radius, tdd
+  create-verification-skill  ↔  maintain-verification-skill, control-ui, definition-of-done, tdd
+  preflight                  ↔  diagnosing-bugs, recon-before-action, control-ui
 
 DESIGN / PLAN
-  arena                    ↔  exhaust-the-design-space, cross-critique, blast-radius
-  exhaust-the-design-space ↔  arena, cross-critique, prototype, grilling
-  cross-critique           ↔  grilling, exhaust-the-design-space, arena, blast-radius
-  grilling                 ↔  cross-critique, grill-with-docs, handoff, diagnosing-bugs
-  handoff                  ↔  beadflow, show-me-your-work, why, create-pr, unslop
-  catch-me-up              ↔  handoff, show-me-your-work, why
-  never-block-on-the-human ↔  authority-boundary, grilling, catch-me-up, handoff
+  arena                      ↔  prototype, cross-critique, blast-radius
+  prototype                  ↔  arena, cross-critique, grilling
+  cross-critique             ↔  grilling, prototype, arena, blast-radius
+  grilling                   ↔  cross-critique, grill-with-docs, handoff, diagnosing-bugs
+  handoff                    ↔  beadflow, show-me-your-work, why, create-pr, unslop
+  catch-me-up                ↔  handoff, show-me-your-work, why
+  never-block-on-the-human   ↔  authority-boundary, grilling, catch-me-up, handoff
 
 HARNESS
-  improve-harness            ↔  feedback-to-infrastructure, whole-job, prove-the-outcome,
-                                authority-boundary, diagnosing-bugs
-  prove-the-outcome          ↔  whole-job, authority-boundary, boil-the-ocean, control-ui,
-                                tdd, blast-radius
-  feedback-to-infrastructure ↔  fix-root-causes, diagnosing-bugs, improve-harness,
-                                deslop, writing-great-skills
-  whole-job                  ↔  boil-the-ocean, prove-the-outcome, create-pr,
-                                authority-boundary, improve-harness
-  authority-boundary         ↔  whole-job, prove-the-outcome, blast-radius, improve-harness
-  boil-the-ocean             ↔  whole-job, prove-the-outcome, fix-root-causes, create-pr
+  improve-harness            ↔  feedback-to-infrastructure, definition-of-done, authority-boundary, diagnosing-bugs
+  definition-of-done         ↔  authority-boundary, control-ui, tdd, blast-radius, create-pr, improve-harness, diagnosing-bugs
+  feedback-to-infrastructure ↔  diagnosing-bugs, improve-harness, deslop, writing-great-skills
+  authority-boundary         ↔  definition-of-done, blast-radius, improve-harness
 ```
 
 ## When to add a new eval

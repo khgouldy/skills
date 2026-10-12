@@ -15,6 +15,6 @@ its cause; `why` recovers rationale.
 ## Should NOT fire
 - "the endpoint already returns 500 intermittently, find the cause" — _expected: diagnosing-bugs_
 - "why was this eviction logic written this way?" — _expected: why_
-- "just add a guard so it stops crashing" — _expected: fix-root-causes_
+- "just add a guard so it stops crashing" — _expected: diagnosing-bugs_
 - "generate a few implementations and merge the best" — _expected: arena_
 - "review this PR for code quality" — _expected: none / create-pr_

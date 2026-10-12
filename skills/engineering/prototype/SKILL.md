@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Use when a design question needs a throwaway, runnable artifact — "does this state model feel right?", "what should this UI look like?", "sanity-check the flow before we build it". Builds a logic TUI or multi-variant UI mock; not for production code.
+description: Use when a design question needs a throwaway, runnable artifact — "does this state model feel right?", "what should this UI look like?", "I'm not sure how this should work", "sanity-check the flow before we build it" — and when a novel interaction or architecture choice has no precedent in the codebase, so two or three competing sketches should be compared before committing. Builds a logic TUI or multi-variant UI mock; not for production code or for work with an established pattern.
 ---
 
 # Prototype
@@ -8,6 +8,17 @@ description: Use when a design question needs a throwaway, runnable artifact —
 A prototype is **throwaway code that answers one design question**. The question
 picks the shape; everything else is scaffolding you delete (or park on a
 throwaway branch) once you know the answer.
+
+## When one sketch is not enough
+
+If the decision has no precedent in the codebase and the answer is not obvious,
+build two or three competing prototypes and compare them side by side before
+committing. That covers a new UI interaction with no prior art, an architecture
+choice with several workable approaches, and anything where the feel matters
+more than the logic. Skip it for mechanical work, for a fix with a clear target
+state, and where the constraints leave one viable approach. To run the
+alternatives as parallel agents and graft the best parts together, use
+[arena](../arena/SKILL.md).
 
 ## Pick a branch
 
@@ -60,4 +71,4 @@ at the top of the prototype.
 
 ---
 
-_Inspired by Matt Pocock's prototype skill (https://github.com/mattpocock/skills). Prose is our own._
+_Inspired by Matt Pocock's prototype skill (https://github.com/mattpocock/skills) and by `principle-exhaust-the-design-space` in Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). Prose is our own._

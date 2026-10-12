@@ -18,7 +18,7 @@ fixes *prose* tells, deslop fixes *code* tells.
   does, or comments that don't match the file's local convention.
 - **Defensive checks on trusted paths** — try/catch and null guards wrapped around
   code that, in this codebase, can't actually fail that way. (If a check is load-
-  bearing, keep it — see [fix-root-causes](../fix-root-causes/SKILL.md): a guard
+  bearing, keep it — see [diagnosing-bugs](../diagnosing-bugs/SKILL.md): a guard
   that silences a real bug is itself slop.)
 - **`any` casts that only bypass a type error.** Find the real type instead.
 - **Needless deep nesting.** Flatten with early returns and guard clauses.
