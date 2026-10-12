@@ -67,6 +67,9 @@ into our prose, and bump the skill here.
 | [why](skills/engineering/why/SKILL.md) | Recover the *rationale* behind code from git, tickets, docs, chat, and observability — cited, with confidence calibrated. | inspired by pstack |
 | [deslop](skills/engineering/deslop/SKILL.md) | Strip AI tells from *code* in a diff: stray comments, defensive guards on trusted paths, `any` casts, deep nesting. | inspired by cursor-team-kit |
 | [control-ui](skills/engineering/control-ui/SKILL.md) | Drive a real web/IDE/Electron UI locally to verify behavior with evidence — screenshots, snapshots, profiles, repros. | inspired by cursor-team-kit |
+| [create-verification-skill](skills/engineering/create-verification-skill/SKILL.md) | Generate a project-local `verify-<app>` skill and feature map so any agent can launch, drive, and prove the app like a user. | inspired by pstack |
+| [maintain-verification-skill](skills/engineering/maintain-verification-skill/SKILL.md) | Periodic upkeep: read every mapped feature from source, drive each one live, ship at most one PR of proven corrections. | inspired by pstack |
+| [preflight](skills/engineering/preflight/SKILL.md) | Check disk, memory, containers, logins, and reachability before a long or unattended run, while the user can still fix them. | original |
 | [beadflow](skills/engineering/beadflow/SKILL.md) | Turn a prompt into delegated, tracked work: plan gate → beads epic → per-bead model-tier calibration → tiered dispatch and review. | original |
 | [prototype](skills/engineering/prototype/SKILL.md) | Throwaway runnable artifact that answers one design question — logic TUI or multi-variant UI mock. | inspired by Matt Pocock |
 | [grilling-frontend-prototyping](skills/engineering/grilling-frontend-prototyping/SKILL.md) | Grilling session where each question is asked with live UI prototypes, not words. | inspired by will-ness-ai / Matt Pocock |
@@ -81,6 +84,8 @@ into our prose, and bump the skill here.
 | [grilling](skills/productivity/grilling/SKILL.md) | Interrogate a plan relentlessly, one question at a time, until it's airtight. | inspired by Matt Pocock |
 | [grill-with-docs](skills/productivity/grill-with-docs/SKILL.md) | A grilling session that captures decisions as ADRs and a glossary along the way. | inspired by Matt Pocock |
 | [handoff](skills/productivity/handoff/SKILL.md) | Write the prompt file a fresh session starts from, and return a one-line launcher for it. | inspired by Matt Pocock |
+| [catch-me-up](skills/productivity/catch-me-up/SKILL.md) | Tell a returning user what changed since their last message and what is waiting on them. | inspired by pstack |
+| [never-block-on-the-human](skills/productivity/never-block-on-the-human/SKILL.md) | Proceed on reversible or already-granted work; batch real questions up front with a recommended default. | inspired by pstack |
 | [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | inspired by Warp |
 | [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
 | [unslop](skills/productivity/unslop/SKILL.md) | Strip AI tells from *prose* and add a human voice — docs, PRs, comments, reports. | inspired by pstack |
@@ -168,7 +173,9 @@ We write our own prose, but the ideas, framing, and inspiration come from:
   merge-conflict, and cross-critique skills are inspired by Warp's MIT-licensed
   common-skills repo.
 - **[Lauren Tan (poteto)](https://github.com/cursor/plugins/tree/main/pstack)** —
-  the `arena`, `blast-radius`, `why`, `unslop`, `show-me-your-work` skills and the
+  the `arena`, `blast-radius`, `why`, `unslop`, `show-me-your-work`,
+  `create-verification-skill`, `maintain-verification-skill`, `catch-me-up`, and
+  `never-block-on-the-human` skills and the
   whole **principles** family (foundational-thinking, redesign-from-first-principles,
   minimize-reader-load, exhaust-the-design-space, make-operations-idempotent,
   fix-root-causes, experience-first) are inspired by her MIT-licensed `pstack`

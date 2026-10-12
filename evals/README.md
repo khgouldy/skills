@@ -141,6 +141,8 @@ SHIP / QUALITY
   deslop        ↔  unslop, diagnosing-bugs
   unslop        ↔  deslop, create-pr, feedback-to-infrastructure
   control-ui    ↔  prove-the-outcome, diagnosing-bugs, blast-radius, tdd
+  create-verification-skill ↔  maintain-verification-skill, control-ui, prove-the-outcome, tdd
+  preflight     ↔  diagnosing-bugs, recon-before-action, control-ui
 
 DESIGN / PLAN
   arena                    ↔  exhaust-the-design-space, cross-critique, blast-radius
@@ -148,6 +150,8 @@ DESIGN / PLAN
   cross-critique           ↔  grilling, exhaust-the-design-space, arena, blast-radius
   grilling                 ↔  cross-critique, grill-with-docs, handoff, diagnosing-bugs
   handoff                  ↔  beadflow, show-me-your-work, why, create-pr, unslop
+  catch-me-up              ↔  handoff, show-me-your-work, why
+  never-block-on-the-human ↔  authority-boundary, grilling, catch-me-up, handoff
 
 HARNESS
   improve-harness            ↔  feedback-to-infrastructure, whole-job, prove-the-outcome,

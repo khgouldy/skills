@@ -98,6 +98,7 @@ model should cover direct commands, scheduled work, and higher-level tools.
 ## Pairs with
 
 - [whole-job](../../productivity/whole-job/SKILL.md) — delivery inside an allowed envelope
+- [never-block-on-the-human](../../productivity/never-block-on-the-human/SKILL.md) — the other side: inside the envelope, proceed without asking
 - [prove-the-outcome](../prove-the-outcome/SKILL.md) — evidence the effect actually landed
 - [create-pr](../create-pr/SKILL.md) / [fixing-and-merging-prs](../fixing-and-merging-prs/SKILL.md) — normal PR path, not bypass
 - [feedback-to-infrastructure](../feedback-to-infrastructure/SKILL.md) — when can-vs-may confusion keeps recurring
