@@ -9,6 +9,8 @@
 //
 // Idempotent: rewrites existing symlinks that point into this repo; refuses to
 // clobber a real directory or a symlink that points elsewhere.
+// Also prunes symlinks into this repo whose skill no longer exists, and warns
+// when a real directory shadows a repo skill.
 
 import { readdirSync, statSync, lstatSync, readlinkSync, symlinkSync, unlinkSync, existsSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
@@ -79,12 +81,37 @@ function ensureLink(destDir, name, srcPath) {
   return action;
 }
 
+// Remove symlinks that point into this repo's skills tree but whose target is
+// gone (a skill that was renamed, merged, or deleted). Never touches real
+// directories or links that point anywhere else.
+function pruneDangling(destDir) {
+  const pruned = [];
+  for (const name of readdirSync(destDir)) {
+    const dest = join(destDir, name);
+    let st;
+    try {
+      st = lstatSync(dest);
+    } catch {
+      continue;
+    }
+    if (!st.isSymbolicLink()) continue;
+    const curResolved = resolve(dirname(dest), readlinkSync(dest));
+    if (!norm(curResolved).startsWith(skillsRoot)) continue;
+    if (existsSync(curResolved)) continue;
+    if (!dryRun) unlinkSync(dest);
+    pruned.push(name);
+  }
+  return pruned;
+}
+
 const skills = listSkills();
 console.log(`${dryRun ? "[dry-run] " : ""}Linking ${skills.length} skills…`);
 
 let created = 0;
 let ok = 0;
 let skipped = 0;
+let pruned = 0;
+const shadowed = [];
 for (const destDir of targets) {
   if (!existsSync(destDir)) {
     console.warn(`  ! missing target dir: ${destDir}`);
@@ -101,8 +128,21 @@ for (const destDir of targets) {
     } else {
       skipped++;
       console.log(`  ${result}: ${name}`);
+      if (result === "skip (real directory)") shadowed.push(join(destDir, name));
     }
+  }
+  for (const name of pruneDangling(destDir)) {
+    pruned++;
+    console.log(`  prune: ${name}`);
   }
 }
 
-console.log(`\nDone. create/relink=${created} ok=${ok} skip=${skipped}${dryRun ? " (dry-run)" : ""}`);
+console.log(`\nDone. create/relink=${created} ok=${ok} skip=${skipped} prune=${pruned}${dryRun ? " (dry-run)" : ""}`);
+
+// A real directory with a skill's name shadows the repo version and stops
+// tracking it, so say so loudly instead of leaving it as one "skip" line.
+if (shadowed.length) {
+  console.warn(`\n! ${shadowed.length} installed skill(s) are real directories and do NOT track this repo:`);
+  for (const p of shadowed) console.warn(`    ${p}`);
+  console.warn("  Move each aside and re-run to link the repo version.");
+}

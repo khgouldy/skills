@@ -13,7 +13,7 @@ implementation (`arena`). Fires on irreversible/uncertain *choices*; not on
 
 ## Should NOT fire
 - "grill me on this plan one question at a time" — _expected: grilling_
-- "build 2–3 prototypes and compare" — _expected: exhaust-the-design-space_
+- "build 2–3 prototypes and compare" — _expected: prototype_
 - "arena this API design across several agents" — _expected: arena_
 - "write ADRs while we grill the plan" — _expected: grill-with-docs_
 - "what could this change break elsewhere?" — _expected: blast-radius_

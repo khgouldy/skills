@@ -1,6 +1,6 @@
 ---
 name: create-verification-skill
-description: Use when a project has no scripted way for an agent to launch the real app, use a feature the way a user would, and capture proof — "make a verification skill for this repo", "teach agents how to run and drive this app", /create-verification-skill. Generates a project-local verify-<app> skill plus a feature map. Not for a one-off UI check (control-ui) or for judging whether evidence matches a claim (prove-the-outcome).
+description: Use when a project has no scripted way for an agent to launch the real app, use a feature the way a user would, and capture proof — "make a verification skill for this repo", "teach agents how to run and drive this app", /create-verification-skill. Generates a project-local verify-<app> skill plus a feature map. Not for a one-off UI check (control-ui) or for judging whether evidence matches a claim (definition-of-done).
 disable-model-invocation: true
 ---
 

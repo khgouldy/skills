@@ -1,6 +1,6 @@
-# A/B Eval: prove-the-outcome
+# A/B Eval: definition-of-done
 
-**Skill under test:** [skills/engineering/prove-the-outcome/SKILL.md](../../skills/engineering/prove-the-outcome/SKILL.md)
+**Skill under test:** [skills/productivity/definition-of-done/SKILL.md](../../skills/productivity/definition-of-done/SKILL.md)
 
 Measures whether the skill stops the model from equating **unit-test green** with
 a **user-facing claim**, and whether it names missing claim-matched evidence.

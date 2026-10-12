@@ -24,7 +24,7 @@ bolts onto *that*. Spend the time once.
   land it in small, reviewable steps.
 
 This is how you preserve option value when a design has to grow. Pairs with
-[fix-root-causes](../fix-root-causes/SKILL.md) (a bolted-on special case is often
+[diagnosing-bugs](../diagnosing-bugs/SKILL.md) (a bolted-on special case is often
 a symptom fix in disguise) and [foundational-thinking](../foundational-thinking/SKILL.md)
 (remove the old shape and rebuild on it, don't keep both side by side).
 

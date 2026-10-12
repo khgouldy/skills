@@ -74,7 +74,6 @@ into our prose, and bump the skill here.
 | [prototype](skills/engineering/prototype/SKILL.md) | Throwaway runnable artifact that answers one design question — logic TUI or multi-variant UI mock. | inspired by Matt Pocock |
 | [grilling-frontend-prototyping](skills/engineering/grilling-frontend-prototyping/SKILL.md) | Grilling session where each question is asked with live UI prototypes, not words. | inspired by will-ness-ai / Matt Pocock |
 | [improve-harness](skills/engineering/improve-harness/SKILL.md) | Improve the environment around a fixed model: baseline a job, find the earliest gap, make the smallest reversible intervention, fresh-rerun, retain/revise/remove. | inspired by Ryan Lopopolo / harness-engineering |
-| [prove-the-outcome](skills/engineering/prove-the-outcome/SKILL.md) | Match evidence to the user/ops claim before calling work done — internal green is not enough. | inspired by Ryan Lopopolo / harness-engineering |
 | [feedback-to-infrastructure](skills/engineering/feedback-to-infrastructure/SKILL.md) | Promote recurring corrections into the smallest durable owner and clean the failure class, not just the instance. | inspired by Ryan Lopopolo / harness-engineering |
 | [authority-boundary](skills/engineering/authority-boundary/SKILL.md) | Separate capability (how) from authority (who/may) at merge, deploy, secrets, and other consequential boundaries. | inspired by Ryan Lopopolo / harness-engineering |
 
@@ -87,10 +86,9 @@ into our prose, and bump the skill here.
 | [catch-me-up](skills/productivity/catch-me-up/SKILL.md) | Tell a returning user what changed since their last message and what is waiting on them. | inspired by pstack |
 | [never-block-on-the-human](skills/productivity/never-block-on-the-human/SKILL.md) | Proceed on reversible or already-granted work; batch real questions up front with a recommended default. | inspired by pstack |
 | [cross-critique](skills/productivity/cross-critique/SKILL.md) | Stress-test a high-stakes decision with independent critiques before committing. | inspired by Warp |
-| [boil-the-ocean](skills/productivity/boil-the-ocean/SKILL.md) | Ship the complete, permanent solution — tests, docs, the real fix — not a workaround. | original |
+| [definition-of-done](skills/productivity/definition-of-done/SKILL.md) | Three gates before "done": the whole solution finished, the claim proven at its real boundary, and the change delivered and checked. | original + harness-engineering |
 | [unslop](skills/productivity/unslop/SKILL.md) | Strip AI tells from *prose* and add a human voice — docs, PRs, comments, reports. | inspired by pstack |
 | [show-me-your-work](skills/productivity/show-me-your-work/SKILL.md) | Keep a reviewable decision-trail log (one TSV row per decision) for long or unattended work. | inspired by pstack |
-| [whole-job](skills/productivity/whole-job/SKILL.md) | Own the full trajectory through proof, review, delivery, and post-verify — don't stop at "code written." | inspired by Ryan Lopopolo / harness-engineering |
 
 ### data
 | Skill | What it does | Source |
@@ -119,9 +117,7 @@ moment rather than running a procedure. They live under `engineering/` and
 | [foundational-thinking](skills/engineering/foundational-thinking/SKILL.md) | Get the data structures right first; scaffold before features; isolate shared state. | inspired by pstack |
 | [redesign-from-first-principles](skills/engineering/redesign-from-first-principles/SKILL.md) | Fold a new requirement in as if it had been there on day one — don't bolt it on. | inspired by pstack |
 | [minimize-reader-load](skills/engineering/minimize-reader-load/SKILL.md) | Optimize for the reader: count layers to trace and state to hold; collapse and shrink both. | inspired by pstack |
-| [exhaust-the-design-space](skills/engineering/exhaust-the-design-space/SKILL.md) | When the answer isn't obvious, build 2-3 alternatives and compare before committing. | inspired by pstack |
 | [make-operations-idempotent](skills/engineering/make-operations-idempotent/SKILL.md) | Design operations to converge to the same end state across crashes, restarts, and retries. | inspired by pstack |
-| [fix-root-causes](skills/engineering/fix-root-causes/SKILL.md) | Fix at the source; refuse guards that just silence a symptom. | inspired by pstack |
 | [experience-first](skills/productivity/experience-first/SKILL.md) | Choose the consumer's experience over implementation convenience; ship fewer, more polished things. | inspired by pstack |
 
 ### harness (cross-cutting)
@@ -133,9 +129,8 @@ fixed, improve context/tools/authority/proof/feedback, close whole jobs.
 | Skill | What it does | Source |
 |---|---|---|
 | [improve-harness](skills/engineering/improve-harness/SKILL.md) | Bounded baseline → gap → intervention → fresh rerun | harness-engineering |
-| [prove-the-outcome](skills/engineering/prove-the-outcome/SKILL.md) | Claim-matched evidence at the real boundary | harness-engineering |
+| [definition-of-done](skills/productivity/definition-of-done/SKILL.md) | Finished, proven at the claim boundary, delivered | harness-engineering |
 | [feedback-to-infrastructure](skills/engineering/feedback-to-infrastructure/SKILL.md) | Recurring pain → durable owner + class cleanup | harness-engineering |
-| [whole-job](skills/productivity/whole-job/SKILL.md) | Lifecycle ownership through delivery | harness-engineering |
 | [authority-boundary](skills/engineering/authority-boundary/SKILL.md) | Can vs may at consequential gates | harness-engineering |
 
 ## Work in progress
@@ -177,16 +172,17 @@ We write our own prose, but the ideas, framing, and inspiration come from:
   `create-verification-skill`, `maintain-verification-skill`, `catch-me-up`, and
   `never-block-on-the-human` skills and the
   whole **principles** family (foundational-thinking, redesign-from-first-principles,
-  minimize-reader-load, exhaust-the-design-space, make-operations-idempotent,
-  fix-root-causes, experience-first) are inspired by her MIT-licensed `pstack`
+  minimize-reader-load, make-operations-idempotent, experience-first, and the
+  design-space and root-cause guidance now folded into `prototype` and
+  `diagnosing-bugs`) are inspired by her MIT-licensed `pstack`
   plugin for Cursor.
 - **[Cursor](https://github.com/cursor/plugins/tree/main/cursor-team-kit)** — the
   `deslop` and `control-ui` skills are inspired by Cursor's MIT-licensed
   `cursor-team-kit` plugin.
 - **[Ryan Lopopolo](https://github.com/lopopolo/harness-engineering)** and the
   OpenAI [Harness engineering](https://openai.com/index/harness-engineering/)
-  essay — the `improve-harness`, `prove-the-outcome`,
-  `feedback-to-infrastructure`, `whole-job`, and `authority-boundary` skills
+  essay — the `improve-harness`, `definition-of-done`,
+  `feedback-to-infrastructure`, and `authority-boundary` skills
   distill ideas from that CC BY 4.0 corpus and related writing; prose here is
   our own rewrite for this library's skill shape.
 

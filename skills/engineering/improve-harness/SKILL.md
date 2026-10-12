@@ -155,10 +155,9 @@ One before/after is a bounded operational claim, not a general treatment effect.
 
 ## Pairs with
 
-- [prove-the-outcome](../prove-the-outcome/SKILL.md) — claim-matched evidence on baseline and rerun
+- [definition-of-done](../../productivity/definition-of-done/SKILL.md) — claim-matched evidence on baseline and rerun; also when the gap is stopping before delivery
 - [feedback-to-infrastructure](../feedback-to-infrastructure/SKILL.md) — when the gap is a recurring correction to promote
 - [authority-boundary](../authority-boundary/SKILL.md) — when the failed handoff is can vs may
-- [whole-job](../../productivity/whole-job/SKILL.md) — when the gap is stopping before delivery/proof
 - [why](../why/SKILL.md) — when recovering intent before intervening
 
 ---

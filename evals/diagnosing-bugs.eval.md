@@ -11,6 +11,9 @@ bugs).
 - "something's wrong, the endpoint returns 500 intermittently, where do I start?"
 - "I have a stack trace and no idea what's causing it"
 - "the function returns the wrong value for some inputs, help me find the cause"
+- "just add a null check so it stops throwing"
+- "wrap this in a try/catch so the page doesn't crash"
+- "it works if I clear the cache file every time — let's just clear it on boot"
 
 ## Should NOT fire
 - "the SUM in this query is double what it should be" — _expected: reviewing-sql_
@@ -18,3 +21,5 @@ bugs).
 - "this BigQuery query is slow and expensive" — _expected: bigquery-superpowers_
 - "write a test for this function" — _expected: tdd_
 - "the dbt incremental model is duplicating rows" — _expected: dbt-incremental-models_
+- "why was this guard added in the first place?" — _expected: why_
+- "what could removing this guard break elsewhere?" — _expected: blast-radius_

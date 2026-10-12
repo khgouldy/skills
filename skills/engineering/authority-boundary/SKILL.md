@@ -1,6 +1,6 @@
 ---
 name: authority-boundary
-description: Use when an action could merge, deploy, touch secrets, mutate production/shared state, or otherwise cross a consequential boundary — separate capability (how) from authority (who/may) and prefer the protected path. Triggers include "just force it", admin bypass, paste the API key, widen scopes, or irreversible prod changes. Not for routine PR opening (create-pr), finishing a partial solution (boil-the-ocean), or claim-matched proof alone (prove-the-outcome).
+description: Use when an action could merge, deploy, touch secrets, mutate production/shared state, or otherwise cross a consequential boundary — separate capability (how) from authority (who/may) and prefer the protected path. Triggers include "just force it", admin bypass, paste the API key, widen scopes, or irreversible prod changes. Not for routine PR opening (create-pr), finishing, proving, or delivering the work itself (definition-of-done).
 ---
 
 # Authority boundary
@@ -12,9 +12,9 @@ what approval, audit, and recovery contract.
 Keep them separate. Work broadly where mistakes are cheap. Narrow, revocable
 grants at consequential boundaries.
 
-This is *can vs may*. For proving the effect actually happened, use
-[prove-the-outcome](../prove-the-outcome/SKILL.md). For owning delivery inside
-an allowed envelope, use [whole-job](../../productivity/whole-job/SKILL.md).
+This is *can vs may*. For proving the effect actually happened and owning
+delivery inside an allowed envelope, use
+[definition-of-done](../../productivity/definition-of-done/SKILL.md).
 
 ## Default envelope: reversible work is wide
 
@@ -97,9 +97,8 @@ model should cover direct commands, scheduled work, and higher-level tools.
 
 ## Pairs with
 
-- [whole-job](../../productivity/whole-job/SKILL.md) — delivery inside an allowed envelope
+- [definition-of-done](../../productivity/definition-of-done/SKILL.md) — delivery inside an allowed envelope, and evidence the effect landed
 - [never-block-on-the-human](../../productivity/never-block-on-the-human/SKILL.md) — the other side: inside the envelope, proceed without asking
-- [prove-the-outcome](../prove-the-outcome/SKILL.md) — evidence the effect actually landed
 - [create-pr](../create-pr/SKILL.md) / [fixing-and-merging-prs](../fixing-and-merging-prs/SKILL.md) — normal PR path, not bypass
 - [feedback-to-infrastructure](../feedback-to-infrastructure/SKILL.md) — when can-vs-may confusion keeps recurring
 
