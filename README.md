@@ -189,6 +189,20 @@ We write our own prose, but the ideas, framing, and inspiration come from:
 If your work inspired a skill here and you'd like different (or no) attribution,
 open an issue — happy to adjust.
 
+## Documentation site
+
+The published site is generated from `skills/**/SKILL.md`. `pyproject.toml` and
+`uv.lock` are the source of truth for the docs toolchain (MkDocs Material).
+`requirements-docs.txt` is kept only for pip users and can be removed.
+
+```bash
+uv sync --locked
+node scripts/build-docs.mjs
+uv run mkdocs serve
+# strict production build (what CI runs):
+uv run mkdocs build --strict
+```
+
 ## License
 
 [MIT](./LICENSE) © 2026 Kevin Gould (par72)

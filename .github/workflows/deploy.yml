@@ -19,28 +19,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Generate docs/ from skills
         run: node scripts/build-docs.mjs
 
-      - uses: actions/setup-python@v5
+      # astral-sh/setup-uv publishes v10.x.x tags only (no floating v10 ref).
+      # v10.3.0 is the current v10 release. python-version sets UV_PYTHON;
+      # .python-version is the same pin for local uv.
+      - uses: astral-sh/setup-uv@v10.3.0
         with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: requirements-docs.txt
+          enable-cache: true
+          python-version: "3.14"
 
-      - name: Install MkDocs Material
-        run: pip install -r requirements-docs.txt
+      - name: Sync docs dependencies
+        run: uv sync --locked
 
       - name: Build site
-        run: mkdocs build --strict
+        run: uv run mkdocs build --strict
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -52,4 +54,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

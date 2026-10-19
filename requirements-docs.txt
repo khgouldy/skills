@@ -1,1 +1,3 @@
-mkdocs-material==9.5.39
+# Source of truth is pyproject.toml and uv.lock (uv sync --locked).
+# This file is kept only for pip users and can be removed.
+mkdocs-material==9.7.7
