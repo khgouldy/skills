@@ -43,25 +43,55 @@ function parseSkill(raw) {
   return { meta, body: match[2].trimStart() };
 }
 
+function sitePageLink(srcCategory, tgtCategory, tgtName) {
+  return relative(join(OUT_DIR, srcCategory), join(OUT_DIR, tgtCategory, `${tgtName}.md`))
+    .split(/[\\/]/)
+    .join("/");
+}
+
+/** GitHub URL for a file (blob) or directory (tree) under skills/. */
+function githubSourceUrl(absPath, isDir) {
+  const rel = relative(SKILLS_DIR, absPath).split(/[\\/]/).join("/");
+  return `https://github.com/khgouldy/skills/${isDir ? "tree" : "blob"}/main/skills/${rel}`;
+}
+
 /**
  * Skills cross-link each other with paths shaped for the source tree, e.g.
  * `../tdd/SKILL.md` or `../../engineering/metamorphic-testing/SKILL.md`. Our
  * generated tree is flatter (site-src/<cat>/<name>.md), so resolve each link
  * against the source layout and re-point it at the corresponding generated page.
  * Links that don't resolve to a real skill are left untouched.
+ *
+ * Companion files (prototype/logic.md, a references/ directory) are not pages.
+ * MkDocs --strict warns on those relative targets, so point them at the source
+ * on GitHub. The on-disk skill still uses the relative path.
  */
 function rewriteLinks(body, srcCategory, srcName) {
   const srcDir = join(SKILLS_DIR, srcCategory, srcName);
-  return body.replace(/\]\(([^)]*?\/SKILL\.md)\)/g, (whole, link) => {
-    if (/^https?:/.test(link)) return whole;
-    const rel = relative(SKILLS_DIR, dirname(resolve(srcDir, link)));
-    const parts = rel.split(/[\\/]/);
-    if (parts.length !== 2) return whole;
-    const [tgtCategory, tgtName] = parts;
-    const newLink = relative(join(OUT_DIR, srcCategory), join(OUT_DIR, tgtCategory, `${tgtName}.md`))
-      .split(/[\\/]/)
-      .join("/");
-    return `](${newLink})`;
+  return body.replace(/\]\(([^)\s]+)\)/g, (whole, raw) => {
+    const splitAt = raw.search(/[?#]/);
+    const link = splitAt === -1 ? raw : raw.slice(0, splitAt);
+    const suffix = splitAt === -1 ? "" : raw.slice(splitAt);
+    if (!link || /^https?:/.test(link) || link.startsWith("mailto:")) return whole;
+
+    if (/(^|\/)SKILL\.md$/.test(link)) {
+      const rel = relative(SKILLS_DIR, dirname(resolve(srcDir, link)));
+      const parts = rel.split(/[\\/]/);
+      if (parts.length !== 2 || parts.includes("..")) return whole;
+      const [tgtCategory, tgtName] = parts;
+      return `](${sitePageLink(srcCategory, tgtCategory, tgtName)}${suffix})`;
+    }
+
+    let st;
+    const abs = resolve(srcDir, link);
+    try {
+      st = statSync(abs);
+    } catch {
+      return whole;
+    }
+    const relToSkills = relative(SKILLS_DIR, abs);
+    if (!relToSkills || relToSkills.startsWith("..")) return whole;
+    return `](${githubSourceUrl(abs, st.isDirectory())}${suffix})`;
   });
 }
 

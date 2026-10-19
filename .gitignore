@@ -17,6 +17,7 @@ site-src/
 site/
 
 # Local docs toolchain / tooling cruft
+.venv/
 .venv-docs/
 .playwright-mcp/
 home.png
