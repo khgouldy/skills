@@ -10,7 +10,7 @@ echo secret > "$T/outside.md"; ln -s "$T/outside.md" "$T/src/linked/SKILL.md"
 cp "$HERE/sync-grok-bot.sh" "$T/repo/scripts/"
 cd "$T/repo"
 git init -q && git checkout -qb test
-mkdir -p grok-bot/good grok-bot/gone && echo old > grok-bot/good/helper.py && echo old > grok-bot/gone/SKILL.md
+mkdir -p grok-bot/good grok-bot/gone && echo old > grok-bot/good/helper.py && echo old > grok-bot/gone/SKILL.md && mkdir -p grok-bot/linked && echo old > grok-bot/linked/SKILL.md
 git add grok-bot && git -c user.name=t -c user.email=t@t commit -q --no-verify -m seed
 export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
 if ! bash scripts/sync-grok-bot.sh "$T/src" >/dev/null 2>"$T/err"; then cat "$T/err"; echo "FAIL: sync exited non-zero"; exit 1; fi
@@ -23,4 +23,5 @@ grep -q "skipping symlinked skill: linked" "$T/err" || { echo "FAIL: symlink not
 grep -q "tracked non-SKILL.md file in mirror: grok-bot/good/helper.py" "$T/err" || { echo "FAIL: no straggler warning"; exit 1; }
 grep -q "skill no longer on box (not removed): grok-bot/gone" "$T/err" || { echo "FAIL: no removed-skill warning"; exit 1; }
 [ -f grok-bot/gone/SKILL.md ] || { echo "FAIL: removed skill was deleted"; exit 1; }
+grep -q "skill no longer on box (not removed): grok-bot/linked" "$T/err" || { echo "FAIL: no warning for symlinked SKILL.md"; exit 1; }
 echo "PASS sync-grok-bot"
