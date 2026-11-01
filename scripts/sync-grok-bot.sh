@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Mirror Grok Bot user-created skills (box workflows dir) into grok-bot/, then commit.
-# Allowlist copy: SKILL.md and other *.md docs only (no scripts, json, logs or state);
-# dotfiles, env/key/pem files and symlinks are never copied.
+# Copies SKILL.md only (never helpers, logs, state, dotfiles or symlinks) and warns
+# about every other file it skips.
 set -euo pipefail
 SRC="${1:-/home/box/agent-data/workflows}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -18,10 +18,11 @@ for d in "$SRC"/*/; do
   [ -f "$d/SKILL.md" ] || continue
   name="$(basename "$d")"
   mkdir -p "$DEST/$name"
-  rsync -rt --no-links --prune-empty-dirs \
-    --exclude '.*' --exclude '*.env*' --exclude '*.key' --exclude '*.pem' \
-    --include '*/' --include '*.md' --exclude '*' \
-    "$d" "$DEST/$name/"
+  install -m 0644 "$d/SKILL.md" "$DEST/$name/SKILL.md"
+  # Only SKILL.md is mirrored; warn loudly about anything else so helpers aren't silently lost.
+  find "$d" -mindepth 1 ! -path "$d/SKILL.md" ! -type d -print | while read -r f; do
+    echo "warn: not mirrored: $name/${f#"$d"}" >&2
+  done
 done
 git add grok-bot
 if git diff --cached --quiet -- grok-bot; then echo "grok-bot/ already in sync"; exit 0; fi
