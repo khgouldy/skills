@@ -19,7 +19,7 @@ scripts/sync-grok-bot.sh /path/to/workflows   # default: /home/box/agent-data/wo
 
 From the Mac mini, a Grok Bot agent copies the workflows over (CopyFromBox) into a
 temp dir, then runs the script against it. The script rsyncs each skill folder
-into `grok-bot/` on a non-main branch (allowlisted text files only; no dotfiles, env/key files or symlinks; no deletions of skills removed upstream — prune by hand),
+into `grok-bot/` on a non-main branch (Markdown files only; no dotfiles, env/key files or symlinks; no deletions of skills removed upstream — prune by hand),
 skips box-internal files like `.library-fingerprint`, and commits if anything changed.
 
 Provenance: original (keving's Grok Bot skills).

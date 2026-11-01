@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Mirror Grok Bot user-created skills (box workflows dir) into grok-bot/, then commit.
-# Allowlist copy: SKILL.md plus plain-text helpers (*.md, *.sh, *.py, *.mjs, *.json, *.txt);
+# Allowlist copy: SKILL.md and other *.md docs only (no scripts, json, logs or state);
 # dotfiles, env/key/pem files and symlinks are never copied.
 set -euo pipefail
 SRC="${1:-/home/box/agent-data/workflows}"
@@ -20,8 +20,7 @@ for d in "$SRC"/*/; do
   mkdir -p "$DEST/$name"
   rsync -rt --no-links --prune-empty-dirs \
     --exclude '.*' --exclude '*.env*' --exclude '*.key' --exclude '*.pem' \
-    --include '*/' --include '*.md' --include '*.sh' --include '*.py' \
-    --include '*.mjs' --include '*.json' --include '*.txt' --exclude '*' \
+    --include '*/' --include '*.md' --exclude '*' \
     "$d" "$DEST/$name/"
 done
 git add grok-bot
