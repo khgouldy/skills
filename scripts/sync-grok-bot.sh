@@ -5,7 +5,7 @@
 set -euo pipefail
 SRC="${1:-/home/box/agent-data/workflows}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-DEST="${SYNC_DEST:-$ROOT/grok-bot}"
+DEST="$ROOT/grok-bot"
 cd "$ROOT"
 branch="$(git rev-parse --abbrev-ref HEAD)"
 if [ "$branch" = main ] || [ "$branch" = master ]; then

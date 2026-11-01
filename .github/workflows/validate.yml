@@ -14,3 +14,5 @@ jobs:
           node-version: "24"
       - name: Validate SKILL.md frontmatter
         run: node scripts/validate-skills.mjs
+      - name: Test grok-bot mirror sync
+        run: bash scripts/test-sync-grok-bot.sh
