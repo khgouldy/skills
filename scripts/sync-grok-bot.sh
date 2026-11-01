@@ -21,7 +21,7 @@ for d in "$SRC"/*/; do
   [ -f "$d/SKILL.md" ] || continue
   mkdir -p "$DEST/$name"
   install -m 0644 "$d/SKILL.md" "$DEST/$name/SKILL.md"
-  # Tracked mirror must hold SKILL.md only; flag stragglers (never auto-deleted).
+  # Contract: stragglers are warned, not removed (deliberate: the sync never deletes; prune by hand).
   git ls-files -- "grok-bot/$name" | while read -r t; do
     [ "$t" = "grok-bot/$name/SKILL.md" ] || echo "warn: tracked non-SKILL.md file in mirror: $t" >&2
   done

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fixture test for sync-grok-bot.sh: only a real SKILL.md may land in the mirror.
+# Fixture test for sync-grok-bot.sh: only a real SKILL.md is copied; tracked stragglers are warned, not removed (by design).
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 T="$(mktemp -d)"

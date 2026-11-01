@@ -26,3 +26,7 @@ Provenance: original (keving's Grok Bot skills).
 
 Note: mirrored skills are copied verbatim. Any rule conflicts between them (e.g. merge
 policy in `bead-dispatch-sop` vs `feature-pipeline`) must be fixed on the box, not here.
+
+The sync never deletes. Files already tracked under `grok-bot/<skill>/` other than
+`SKILL.md`, and skills removed on the box, are reported as warnings; prune them by hand.
+Test: `bash scripts/test-sync-grok-bot.sh` (runs in CI).
