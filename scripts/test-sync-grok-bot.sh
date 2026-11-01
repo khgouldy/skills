@@ -14,6 +14,7 @@ mkdir -p grok-bot/good grok-bot/gone && echo old > grok-bot/good/helper.py && ec
 git add grok-bot && git -c user.name=t -c user.email=t@t commit -q --no-verify -m seed
 export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
 if ! bash scripts/sync-grok-bot.sh "$T/src" >/dev/null 2>"$T/err"; then cat "$T/err"; echo "FAIL: sync exited non-zero"; exit 1; fi
+# Warn-only contract: tracked straggler helper.py is expected to survive (never auto-deleted).
 got="$(cd grok-bot/good && find . -type f -o -type l | LC_ALL=C sort -f | tr '\n' ' ')"
 [ "$got" = "./helper.py ./SKILL.md " ] || { echo "FAIL: mirrored files: $got"; exit 1; }
 grep -q "not mirrored: good/.env" "$T/err" || { echo "FAIL: no warning for .env"; exit 1; }

@@ -32,7 +32,7 @@ for d in "$SRC"/*/; do
 done
 # Warn about mirrored skills that no longer exist (or lack SKILL.md) on the box.
 git ls-files -- grok-bot | awk -F/ 'NF>=3{print $2}' | sort -u | while read -r m; do
-  [ -f "$SRC/$m/SKILL.md" ] || echo "warn: skill no longer on box (not removed): grok-bot/$m" >&2
+  { [ -f "$SRC/$m/SKILL.md" ] && [ ! -L "$SRC/$m/SKILL.md" ] && [ ! -L "$SRC/$m" ]; } || echo "warn: skill no longer on box (not removed): grok-bot/$m" >&2
 done
 git add grok-bot
 if git diff --cached --quiet -- grok-bot; then echo "grok-bot/ already in sync"; exit 0; fi
