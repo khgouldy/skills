@@ -5,7 +5,7 @@
 set -euo pipefail
 SRC="${1:-/home/box/agent-data/workflows}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-DEST="$ROOT/grok-bot"
+DEST="${SYNC_DEST:-$ROOT/grok-bot}"
 cd "$ROOT"
 branch="$(git rev-parse --abbrev-ref HEAD)"
 if [ "$branch" = main ] || [ "$branch" = master ]; then
@@ -15,13 +15,19 @@ fi
 trap 'git reset -q -- grok-bot' ERR
 mkdir -p "$DEST"
 for d in "$SRC"/*/; do
-  [ -f "$d/SKILL.md" ] || continue
+  d="${d%/}"
   name="$(basename "$d")"
+  if [ -L "$d" ] || [ -L "$d/SKILL.md" ]; then echo "warn: skipping symlinked skill: $name" >&2; continue; fi
+  [ -f "$d/SKILL.md" ] || continue
   mkdir -p "$DEST/$name"
   install -m 0644 "$d/SKILL.md" "$DEST/$name/SKILL.md"
+  # Tracked mirror must hold SKILL.md only; flag stragglers (never auto-deleted).
+  git ls-files -- "grok-bot/$name" | while read -r t; do
+    [ "$t" = "grok-bot/$name/SKILL.md" ] || echo "warn: tracked non-SKILL.md file in mirror: $t" >&2
+  done
   # Only SKILL.md is mirrored; warn loudly about anything else so helpers aren't silently lost.
   find "$d" -mindepth 1 ! -path "$d/SKILL.md" ! -type d -print | while read -r f; do
-    echo "warn: not mirrored: $name/${f#"$d"}" >&2
+    echo "warn: not mirrored: $name/${f#"$d/"}" >&2
   done
 done
 git add grok-bot
