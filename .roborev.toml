@@ -1,0 +1,11 @@
+# roborev per-repo config: https://github.com/kenn-io/roborev
+# This committed file opts the repo in to automatic post-commit reviews.
+# Agent and model come from ~/.roborev/config.toml. Lockfiles (package-lock,
+# pnpm-lock, uv.lock, go.sum, ...) and .beads/ are excluded by roborev already.
+
+review_guidelines = """
+Skills are agent instructions in Markdown. Flag instructions that are
+ambiguous, contradict each other or another skill, or tell an agent to do
+something unsafe (delete data, expose secrets, skip review or tests). Review
+scripts for correctness.
+"""
